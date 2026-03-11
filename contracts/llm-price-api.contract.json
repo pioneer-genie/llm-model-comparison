@@ -1,0 +1,186 @@
+{
+  "contract_version": "2026-03-12",
+  "object": "contract",
+  "name": "llm-price-api",
+  "default_output_format": "json",
+  "deployment_modes": [
+    "local_cli",
+    "local_http_api",
+    "static_github_pages"
+  ],
+  "response_envelope": {
+    "required_fields": [
+      "contract_version",
+      "object",
+      "data"
+    ],
+    "optional_fields": [
+      "meta",
+      "error"
+    ]
+  },
+  "catalog_contract": {
+    "required_model_fields": [
+      "id",
+      "provider",
+      "model",
+      "pricing.input_usd_per_1m_tokens",
+      "pricing.output_usd_per_1m_tokens"
+    ],
+    "recommended_model_fields": [
+      "family",
+      "description",
+      "modalities",
+      "context_window_tokens",
+      "max_output_tokens",
+      "tags",
+      "source_url",
+      "source_note"
+    ]
+  },
+  "http_endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "description": "Basic server health check."
+    },
+    {
+      "method": "GET",
+      "path": "/v1/catalog",
+      "description": "Return the raw pricing catalog."
+    },
+    {
+      "method": "GET",
+      "path": "/v1/contract",
+      "description": "Return the machine-readable API contract."
+    },
+    {
+      "method": "GET",
+      "path": "/v1/models",
+      "description": "List models or fetch one model with ?id=<model_id>."
+    },
+    {
+      "method": "POST",
+      "path": "/v1/compare",
+      "description": "Estimate workload cost for specific models or a filtered subset."
+    },
+    {
+      "method": "POST",
+      "path": "/v1/analyze",
+      "description": "Return ranked analysis, cheapest model, and budget-fit models."
+    }
+  ],
+  "static_documents": [
+    {
+      "path": "data/pricing.catalog.json",
+      "description": "Raw pricing catalog for static hosting."
+    },
+    {
+      "path": "contracts/llm-price-api.contract.json",
+      "description": "Raw contract document for static hosting."
+    },
+    {
+      "path": "api/index.json",
+      "description": "Index of generated static JSON views."
+    },
+    {
+      "path": "api/views/by-input-price.json",
+      "description": "Precomputed model ordering by input token price."
+    },
+    {
+      "path": "api/views/by-output-price.json",
+      "description": "Precomputed model ordering by output token price."
+    },
+    {
+      "path": "api/views/workloads/balanced.json",
+      "description": "Precomputed workload comparison for a balanced preset."
+    }
+  ],
+  "cli_commands": [
+    {
+      "command": "llm-pricing list --format json",
+      "description": "List models in JSON."
+    },
+    {
+      "command": "llm-pricing show openai/gpt-4.1-mini",
+      "description": "Return one model document."
+    },
+    {
+      "command": "llm-pricing compare --models openai/gpt-4.1-mini,google/gemini-2.0-flash --input-tokens 1000000 --output-tokens 250000",
+      "description": "Compare workload cost."
+    },
+    {
+      "command": "llm-pricing analyze --input-tokens 1000000 --output-tokens 250000 --budget-usd 2",
+      "description": "Rank the catalog for a given workload."
+    },
+    {
+      "command": "llm-pricing serve --port 3030",
+      "description": "Run the local HTTP API."
+    }
+  ],
+  "request_shapes": {
+    "compare": {
+      "model_ids": [
+        "openai/gpt-4.1-mini",
+        "google/gemini-2.0-flash"
+      ],
+      "filters": {
+        "provider": "openai",
+        "tag": "cost"
+      },
+      "workload": {
+        "input_tokens": 1000000,
+        "cached_input_tokens": 0,
+        "output_tokens": 250000
+      },
+      "sort_by": "estimated_total_cost_usd"
+    },
+    "analyze": {
+      "filters": {
+        "provider": "google"
+      },
+      "workload": {
+        "input_tokens": 1000000,
+        "output_tokens": 250000
+      },
+      "budget_usd": 2,
+      "top_k": 3
+    }
+  },
+  "response_examples": {
+    "list": {
+      "contract_version": "2026-03-12",
+      "object": "list",
+      "data": [
+        {
+          "id": "openai/gpt-4.1-mini",
+          "provider": "openai",
+          "pricing": {
+            "input_usd_per_1m_tokens": 0.4,
+            "output_usd_per_1m_tokens": 1.6
+          }
+        }
+      ],
+      "meta": {
+        "count": 1
+      }
+    },
+    "compare": {
+      "contract_version": "2026-03-12",
+      "object": "price_comparison",
+      "data": {
+        "workload": {
+          "input_tokens": 1000000,
+          "cached_input_tokens": 0,
+          "output_tokens": 250000
+        },
+        "comparisons": [
+          {
+            "model_id": "openai/gpt-4.1-mini",
+            "estimated_total_cost_usd": 0.8
+          }
+        ]
+      }
+    }
+  }
+}

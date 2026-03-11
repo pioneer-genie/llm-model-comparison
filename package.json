@@ -1,0 +1,19 @@
+{
+  "name": "llm-model-comparison",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "LLM-friendly model pricing catalog with shared CLI and HTTP API.",
+  "bin": {
+    "llm-pricing": "./src/cli.js"
+  },
+  "scripts": {
+    "build": "node ./scripts/build-static.js",
+    "cli": "node ./src/cli.js",
+    "serve": "node ./src/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

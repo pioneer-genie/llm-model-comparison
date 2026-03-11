@@ -1,0 +1,185 @@
+{
+  "contract_version": "2026-03-12",
+  "object": "pricing_catalog",
+  "catalog_name": "starter-seed",
+  "currency": "USD",
+  "unit": "usd_per_1m_tokens",
+  "notes": [
+    "Starter seed data for local development and contract testing.",
+    "Verify each provider's official pricing before production use."
+  ],
+  "models": [
+    {
+      "id": "openai/gpt-4.1",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-4.1",
+      "family": "gpt-4.1",
+      "description": "Flagship general-purpose model.",
+      "modalities": [
+        "text",
+        "vision"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 2,
+        "cached_input_usd_per_1m_tokens": 0.5,
+        "output_usd_per_1m_tokens": 8
+      },
+      "context_window_tokens": 1047576,
+      "max_output_tokens": 32768,
+      "tags": [
+        "general",
+        "quality"
+      ],
+      "source_url": "https://openai.com/api/pricing/",
+      "source_note": "Seed value for local comparison."
+    },
+    {
+      "id": "openai/gpt-4.1-mini",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-4.1-mini",
+      "family": "gpt-4.1",
+      "description": "Lower-cost balanced model.",
+      "modalities": [
+        "text",
+        "vision"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 0.4,
+        "cached_input_usd_per_1m_tokens": 0.1,
+        "output_usd_per_1m_tokens": 1.6
+      },
+      "context_window_tokens": 1047576,
+      "max_output_tokens": 32768,
+      "tags": [
+        "balanced",
+        "cost"
+      ],
+      "source_url": "https://openai.com/api/pricing/",
+      "source_note": "Seed value for local comparison."
+    },
+    {
+      "id": "openai/gpt-4.1-nano",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-4.1-nano",
+      "family": "gpt-4.1",
+      "description": "Ultra-low cost small model.",
+      "modalities": [
+        "text"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 0.1,
+        "cached_input_usd_per_1m_tokens": 0.025,
+        "output_usd_per_1m_tokens": 0.4
+      },
+      "context_window_tokens": 1047576,
+      "max_output_tokens": 32768,
+      "tags": [
+        "fast",
+        "cost"
+      ],
+      "source_url": "https://openai.com/api/pricing/",
+      "source_note": "Seed value for local comparison."
+    },
+    {
+      "id": "anthropic/claude-3-7-sonnet",
+      "provider": "anthropic",
+      "provider_label": "Anthropic",
+      "model": "claude-3-7-sonnet",
+      "family": "claude-3",
+      "description": "Reasoning-oriented model.",
+      "modalities": [
+        "text",
+        "vision"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 3,
+        "output_usd_per_1m_tokens": 15
+      },
+      "context_window_tokens": 200000,
+      "max_output_tokens": 8192,
+      "tags": [
+        "reasoning",
+        "quality"
+      ],
+      "source_url": "https://www.anthropic.com/pricing",
+      "source_note": "Seed value for local comparison."
+    },
+    {
+      "id": "anthropic/claude-3.5-haiku",
+      "provider": "anthropic",
+      "provider_label": "Anthropic",
+      "model": "claude-3.5-haiku",
+      "family": "claude-3.5",
+      "description": "Fast, cost-focused model.",
+      "modalities": [
+        "text",
+        "vision"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 0.8,
+        "output_usd_per_1m_tokens": 4
+      },
+      "context_window_tokens": 200000,
+      "max_output_tokens": 8192,
+      "tags": [
+        "fast",
+        "cost"
+      ],
+      "source_url": "https://www.anthropic.com/pricing",
+      "source_note": "Seed value for local comparison."
+    },
+    {
+      "id": "google/gemini-2.0-flash",
+      "provider": "google",
+      "provider_label": "Google",
+      "model": "gemini-2.0-flash",
+      "family": "gemini-2.0",
+      "description": "High-throughput low-latency model.",
+      "modalities": [
+        "text",
+        "vision",
+        "audio"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 0.1,
+        "output_usd_per_1m_tokens": 0.4
+      },
+      "context_window_tokens": 1048576,
+      "max_output_tokens": 8192,
+      "tags": [
+        "fast",
+        "balanced"
+      ],
+      "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "source_note": "Seed value for local comparison."
+    },
+    {
+      "id": "google/gemini-1.5-pro",
+      "provider": "google",
+      "provider_label": "Google",
+      "model": "gemini-1.5-pro",
+      "family": "gemini-1.5",
+      "description": "Higher quality large-context model.",
+      "modalities": [
+        "text",
+        "vision",
+        "audio"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 1.25,
+        "output_usd_per_1m_tokens": 5
+      },
+      "context_window_tokens": 2097152,
+      "max_output_tokens": 8192,
+      "tags": [
+        "quality",
+        "large-context"
+      ],
+      "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "source_note": "Seed value for local comparison."
+    }
+  ]
+}

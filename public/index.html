@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LLM Model Comparison</title>
+    <meta
+      name="description"
+      content="Static GitHub Pages deployment for LLM pricing catalog, sorted JSON views, and browser-side model comparison."
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">Static GitHub Pages Delivery</p>
+        <h1>LLM pricing catalog with raw JSON, sorted views, and client-side comparison</h1>
+        <p class="hero-copy">
+          The site ships raw pricing documents for LLM agents and a lightweight browser interface for
+          people. Everything is static. Arbitrary comparisons run in the browser against the same
+          catalog contract.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="./data/pricing.catalog.json">Raw catalog</a>
+          <a class="button" href="./api/index.json">Static API index</a>
+          <a class="button" href="./contracts/llm-price-api.contract.json">Contract</a>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel panel-wide">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Machine-readable</p>
+              <h2>Static endpoints</h2>
+            </div>
+            <p class="panel-copy">Precomputed JSON views that work well for scraping, retrieval, or tool inputs.</p>
+          </div>
+          <div class="endpoint-grid" id="endpointGrid"></div>
+        </section>
+
+        <section class="panel panel-wide">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Browser-side comparison</p>
+              <h2>Compare workload cost</h2>
+            </div>
+            <p class="panel-copy">Shareable query params are supported. Select models or filter by provider.</p>
+          </div>
+
+          <form class="compare-form" id="compareForm">
+            <label>
+              <span>Provider filter</span>
+              <select id="providerFilter" name="provider"></select>
+            </label>
+            <label>
+              <span>Sort by</span>
+              <select id="sortBy" name="sort_by">
+                <option value="estimated_total_cost_usd">Estimated total cost</option>
+                <option value="input_price">Input price</option>
+                <option value="output_price">Output price</option>
+                <option value="model_id">Model id</option>
+              </select>
+            </label>
+            <label>
+              <span>Input tokens</span>
+              <input id="inputTokens" name="input_tokens" type="number" min="0" step="1000" value="1000000">
+            </label>
+            <label>
+              <span>Cached input tokens</span>
+              <input id="cachedInputTokens" name="cached_input_tokens" type="number" min="0" step="1000" value="0">
+            </label>
+            <label>
+              <span>Output tokens</span>
+              <input id="outputTokens" name="output_tokens" type="number" min="0" step="1000" value="250000">
+            </label>
+            <label>
+              <span>Budget (USD)</span>
+              <input id="budgetUsd" name="budget_usd" type="number" min="0" step="0.01" placeholder="Optional">
+            </label>
+            <label class="model-picker">
+              <span>Models</span>
+              <select id="modelSelect" name="models" multiple size="8"></select>
+            </label>
+            <div class="form-actions">
+              <button class="button button-primary" type="submit">Compare</button>
+              <button class="button" id="balancedPreset" type="button">Use balanced preset</button>
+              <button class="button" id="clearSelection" type="button">Clear models</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header compact">
+            <div>
+              <p class="eyebrow">Preset views</p>
+              <h2>Precomputed workload analyses</h2>
+            </div>
+          </div>
+          <div class="preset-list" id="presetList"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header compact">
+            <div>
+              <p class="eyebrow">Summary</p>
+              <h2>Current selection</h2>
+            </div>
+          </div>
+          <dl class="summary-list" id="summaryList"></dl>
+        </section>
+
+        <section class="panel panel-wide">
+          <div class="panel-header compact">
+            <div>
+              <p class="eyebrow">Results</p>
+              <h2>Comparison table</h2>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Total USD</th>
+                  <th>Input rate</th>
+                  <th>Output rate</th>
+                  <th>Cached input rate</th>
+                  <th>Input cost</th>
+                  <th>Output cost</th>
+                </tr>
+              </thead>
+              <tbody id="resultsBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
