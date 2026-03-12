@@ -24,6 +24,10 @@
       "id",
       "provider",
       "model",
+      "status",
+      "pricing_mode",
+      "last_verified_at",
+      "source_url",
       "pricing.input_usd_per_1m_tokens",
       "pricing.output_usd_per_1m_tokens"
     ],
@@ -84,6 +88,10 @@
       "description": "Index of generated static JSON views."
     },
     {
+      "path": "api/snapshots/index.json",
+      "description": "Index of historical pricing catalog snapshots."
+    },
+    {
       "path": "api/views/by-input-price.json",
       "description": "Precomputed model ordering by input token price."
     },
@@ -94,6 +102,14 @@
     {
       "path": "api/views/workloads/balanced.json",
       "description": "Precomputed workload comparison for a balanced preset."
+    },
+    {
+      "path": "api/views/status/active.json",
+      "description": "Precomputed model list for active models."
+    },
+    {
+      "path": "api/views/pricing-modes/text_tokens.json",
+      "description": "Precomputed model list for a pricing mode."
     }
   ],
   "cli_commands": [
@@ -155,6 +171,9 @@
         {
           "id": "openai/gpt-4.1-mini",
           "provider": "openai",
+          "status": "active",
+          "pricing_mode": "text_tokens",
+          "last_verified_at": "2026-03-12",
           "pricing": {
             "input_usd_per_1m_tokens": 0.4,
             "output_usd_per_1m_tokens": 1.6
@@ -177,6 +196,7 @@
         "comparisons": [
           {
             "model_id": "openai/gpt-4.1-mini",
+            "last_verified_at": "2026-03-12",
             "estimated_total_cost_usd": 0.8
           }
         ]

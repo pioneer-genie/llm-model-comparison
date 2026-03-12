@@ -15,12 +15,17 @@ export function getModelByIdInCatalog(catalog, modelId) {
 
 export function filterModels(models, filters = {}) {
   const provider = normalizeOptionalString(filters.provider);
+  const status = normalizeOptionalString(filters.status);
   const tag = normalizeOptionalString(filters.tag);
   const modality = normalizeOptionalString(filters.modality);
   const ids = Array.isArray(filters.model_ids) ? new Set(filters.model_ids) : null;
 
   return models.filter((model) => {
     if (provider && model.provider !== provider) {
+      return false;
+    }
+
+    if (status && model.status !== status) {
       return false;
     }
 
@@ -98,6 +103,9 @@ export function estimateCostForModel(model, workloadInput = {}) {
     model_id: model.id,
     provider: model.provider,
     model: model.model,
+    status: model.status,
+    pricing_mode: model.pricing_mode,
+    last_verified_at: model.last_verified_at,
     workload,
     rates: {
       input_usd_per_1m_tokens: model.pricing.input_usd_per_1m_tokens,

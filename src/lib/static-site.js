@@ -1,4 +1,4 @@
-import { cp, mkdir, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -11,6 +11,7 @@ const REPO_ROOT = join(__dirname, "../..");
 const PUBLIC_DIR = join(REPO_ROOT, "public");
 const DATA_DIR = join(REPO_ROOT, "data");
 const CONTRACTS_DIR = join(REPO_ROOT, "contracts");
+const SNAPSHOTS_DIR = join(REPO_ROOT, "snapshots");
 const DIST_DIR = join(REPO_ROOT, "dist");
 
 export const WORKLOAD_PRESETS = [
@@ -49,8 +50,12 @@ export async function buildStaticSite(options = {}) {
   const catalog = loadCatalog();
   const contract = loadContract();
   const providers = uniqueSorted(catalog.models.map((model) => model.provider));
+  const statuses = uniqueSorted(catalog.models.map((model) => model.status));
+  const pricingModes = uniqueSorted(catalog.models.map((model) => model.pricing_mode));
   const tags = uniqueSorted(catalog.models.flatMap((model) => model.tags ?? []));
   const modalities = uniqueSorted(catalog.models.flatMap((model) => model.modalities ?? []));
+  const snapshotFiles = await loadSnapshotFiles();
+  const latestVerifiedAt = uniqueSorted(catalog.models.map((model) => model.last_verified_at)).at(-1);
 
   await rm(outDir, { recursive: true, force: true });
   await mkdir(outDir, { recursive: true });
@@ -59,6 +64,7 @@ export async function buildStaticSite(options = {}) {
   await cp(PUBLIC_DIR, outDir, { recursive: true });
   await cp(DATA_DIR, join(outDir, "data"), { recursive: true });
   await cp(CONTRACTS_DIR, join(outDir, "contracts"), { recursive: true });
+  await cp(SNAPSHOTS_DIR, join(outDir, "snapshots"), { recursive: true });
   await cp(join(__dirname, "pricing-engine.js"), join(outDir, "assets/pricing-engine.js"));
   await writeFile(join(outDir, ".nojekyll"), "");
 
@@ -116,6 +122,29 @@ export async function buildStaticSite(options = {}) {
     }));
   }
 
+  for (const status of statuses) {
+    await writeJson(outDir, `api/views/status/${status}.json`, createModelView(catalog, {
+      title: `Models with status ${status}`,
+      filters: { status },
+      sort_by: "input_price"
+    }));
+  }
+
+  for (const pricingMode of pricingModes) {
+    await writeJson(outDir, `api/views/pricing-modes/${pricingMode}.json`, {
+      contract_version: CONTRACT_VERSION,
+      object: "list",
+      data: catalog.models
+        .filter((model) => model.pricing_mode === pricingMode)
+        .sort((left, right) => left.id.localeCompare(right.id)),
+      meta: {
+        title: `Models with pricing mode ${pricingMode}`,
+        count: catalog.models.filter((model) => model.pricing_mode === pricingMode).length,
+        pricing_mode: pricingMode
+      }
+    });
+  }
+
   for (const preset of WORKLOAD_PRESETS) {
     await writeJson(outDir, `api/views/workloads/${preset.id}.json`, {
       contract_version: CONTRACT_VERSION,
@@ -130,6 +159,18 @@ export async function buildStaticSite(options = {}) {
     });
   }
 
+  await writeJson(outDir, "api/snapshots/index.json", {
+    contract_version: CONTRACT_VERSION,
+    object: "snapshot_index",
+    data: snapshotFiles.map((fileName) => ({
+      file_name: fileName,
+      path: `snapshots/${fileName}`
+    })),
+    meta: {
+      count: snapshotFiles.length
+    }
+  });
+
   await writeJson(outDir, "api/index.json", {
     contract_version: CONTRACT_VERSION,
     object: "api_index",
@@ -142,6 +183,7 @@ export async function buildStaticSite(options = {}) {
       api_documents: {
         catalog: "api/catalog.json",
         contract: "api/contract.json",
+        snapshot_index: "api/snapshots/index.json",
         model_index: "api/models/index.json",
         sort_views: [
           {
@@ -156,6 +198,14 @@ export async function buildStaticSite(options = {}) {
         provider_views: providers.map((provider) => ({
           id: provider,
           path: `api/views/providers/${provider}.json`
+        })),
+        status_views: statuses.map((status) => ({
+          id: status,
+          path: `api/views/status/${status}.json`
+        })),
+        pricing_mode_views: pricingModes.map((pricingMode) => ({
+          id: pricingMode,
+          path: `api/views/pricing-modes/${pricingMode}.json`
         })),
         tag_views: tags.map((tag) => ({
           id: tag,
@@ -174,7 +224,13 @@ export async function buildStaticSite(options = {}) {
       summary: {
         model_count: catalog.models.length,
         provider_count: providers.length,
+        status_count: statuses.length,
+        pricing_mode_count: pricingModes.length,
+        latest_verified_at: latestVerifiedAt,
+        latest_snapshot_file: snapshotFiles[0] ?? null,
         providers,
+        statuses,
+        pricing_modes: pricingModes,
         tags,
         modalities
       }
@@ -211,6 +267,14 @@ async function writeJson(outDir, relativePath, value) {
   const fullPath = join(outDir, relativePath);
   await mkdir(dirname(fullPath), { recursive: true });
   await writeFile(fullPath, `${JSON.stringify(value, null, 2)}\n`);
+}
+
+async function loadSnapshotFiles() {
+  const entries = await readdir(SNAPSHOTS_DIR, { withFileTypes: true });
+  return entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
+    .map((entry) => entry.name)
+    .sort((left, right) => right.localeCompare(left));
 }
 
 function uniqueSorted(values) {

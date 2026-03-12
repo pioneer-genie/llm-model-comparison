@@ -45,6 +45,9 @@ test/analysis.test.js              # 기본 검증
   "id": "openai/gpt-4.1-mini",
   "provider": "openai",
   "model": "gpt-4.1-mini",
+  "status": "active",
+  "pricing_mode": "text_tokens",
+  "last_verified_at": "2026-03-12",
   "pricing": {
     "input_usd_per_1m_tokens": 0.4,
     "cached_input_usd_per_1m_tokens": 0.1,
@@ -54,6 +57,15 @@ test/analysis.test.js              # 기본 검증
 ```
 
 이 네이밍을 길게 둔 이유는 축약어보다 LLM이 오해 없이 읽기 쉽게 하기 위해서입니다.
+
+추가로 아래 메타데이터를 강제합니다.
+
+- `status`: `active | preview | deprecated`
+- `pricing_mode`: 현재는 `text_tokens`
+- `last_verified_at`: `YYYY-MM-DD`
+- `source_url`: 공식 가격 확인 링크
+
+이 필드들이 있어야 나중에 가격 최신성과 모델 상태를 함께 해석할 수 있습니다.
 
 ## 설치
 
@@ -98,10 +110,14 @@ npm run build
 생성 결과는 `dist/` 아래에 나옵니다.
 
 - `dist/data/pricing.catalog.json`
+- `dist/snapshots/*.json`
 - `dist/contracts/llm-price-api.contract.json`
 - `dist/api/index.json`
+- `dist/api/snapshots/index.json`
 - `dist/api/views/by-input-price.json`
 - `dist/api/views/by-output-price.json`
+- `dist/api/views/status/*.json`
+- `dist/api/views/pricing-modes/*.json`
 - `dist/api/views/providers/*.json`
 - `dist/api/views/tags/*.json`
 - `dist/api/views/workloads/*.json`
@@ -112,6 +128,7 @@ npm run build
 ### 왜 이 구조가 맞는가
 
 - raw catalog는 LLM이 직접 읽을 수 있음
+- snapshot 파일로 가격 변경 이력을 남길 수 있음
 - 자주 쓰는 정렬 view는 미리 JSON으로 생성 가능
 - preset workload 비교도 빌드 시 미리 생성 가능
 - 임의 workload 비교는 브라우저가 raw catalog를 읽고 클라이언트에서 계산
@@ -189,6 +206,13 @@ curl -s http://localhost:3030/v1/analyze \
 - CLI와 API가 같은 로직을 써서 응답 shape가 일관됨
 - `/v1/contract`와 `contracts/llm-price-api.contract.json`로 machine-readable contract 제공
 - GitHub Pages 배포 시에도 raw catalog와 sorted static JSON view를 그대로 유지
+- `status`, `pricing_mode`, `last_verified_at`, `source_url`가 있어서 LLM이 최신성과 운영 상태를 같이 해석 가능
+
+## 데이터 운영 원칙
+
+- 가격 변경 시 `data/pricing.catalog.json`을 갱신합니다.
+- 같은 날짜 기준 스냅샷을 `snapshots/YYYY-MM-DD.pricing.catalog.json`에 남깁니다.
+- 최소 검증 기준은 `id` 중복 금지, `status` 필수, `pricing_mode` 필수, `last_verified_at` 필수, `source_url` 필수입니다.
 
 ## 주의
 

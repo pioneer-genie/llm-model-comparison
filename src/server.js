@@ -34,6 +34,7 @@ export function createRequestHandler() {
 
         const models = listModels({
           provider: url.searchParams.get("provider") ?? undefined,
+          status: url.searchParams.get("status") ?? undefined,
           tag: url.searchParams.get("tag") ?? undefined,
           modality: url.searchParams.get("modality") ?? undefined,
           sort_by: url.searchParams.get("sort_by") ?? "id"

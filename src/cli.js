@@ -43,6 +43,7 @@ async function main(argv) {
 function printList(parsed) {
   const models = listModels({
     provider: parsed.provider,
+    status: parsed.status,
     tag: parsed.tag,
     modality: parsed.modality,
     sort_by: parsed.sortBy ?? "id"
@@ -120,7 +121,7 @@ function printHelp() {
     "llm-pricing <command> [options]",
     "",
     "Commands:",
-    "  list [--provider openai] [--tag cost] [--format json|table]",
+    "  list [--provider openai] [--status active] [--tag cost] [--format json|table]",
     "  show <model_id>",
     "  compare --models id1,id2 --input-tokens 1000000 --output-tokens 250000",
     "  analyze --input-tokens 1000000 --output-tokens 250000 [--budget-usd 2]",
@@ -174,6 +175,7 @@ function splitCsv(value) {
 function collectFilters(parsed) {
   return {
     provider: parsed.provider,
+    status: parsed.status,
     tag: parsed.tag,
     modality: parsed.modality
   };
