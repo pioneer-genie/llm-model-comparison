@@ -223,7 +223,7 @@ curl -s http://localhost:3030/v1/analyze \
 - 가격 변경 시 `data/pricing.catalog.json`을 갱신합니다.
 - 같은 날짜 기준 스냅샷을 `snapshots/YYYY-MM-DD.pricing.catalog.json`에 남깁니다.
 - 최소 검증 기준은 `id` 중복 금지, `status` 필수, `pricing_mode` 필수, `last_verified_at` 필수, `source_url` 필수입니다.
-- 현재 catalog는 OpenAI, Anthropic, Google의 공식 pricing page 기준 curated general-purpose text model 집합입니다.
+- 현재 catalog는 OpenAI, Anthropic, Google의 공식 pricing page 기준 curated general-purpose + coding(Codex) text model 집합입니다.
 - provider가 prompt 길이, long context, batch, cache storage를 따로 공개하면 `pricing_tiers`와 확장 pricing 필드에 같이 적재합니다.
 
 ## 주의

@@ -7,7 +7,7 @@
   "snapshot_date": "2026-03-12",
   "notes": [
     "Curated from official provider pricing pages on 2026-03-12.",
-    "Scope is general-purpose text-token inference pricing, not every specialized audio, image, realtime, chat-alias, or media-generation model.",
+    "Scope is general-purpose and coding (Codex) text-token inference pricing, not every specialized audio, image, realtime, chat-alias, or media-generation model.",
     "pricing is the default comparison basis used by the CLI, API, and static workload views. When providers publish alternate tiers, batch discounts, or cache modifiers, those values are stored in pricing_tiers or extra pricing fields.",
     "For Google models that publish separate audio rates, the structured pricing fields use the text/image/video token rates because the current comparison engine is text-token oriented."
   ],
@@ -416,6 +416,218 @@
         "omni"
       ],
       "source_url": "https://developers.openai.com/api/docs/models/gpt-4o-mini"
+    },
+    {
+      "id": "openai/gpt-5.3-codex",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5.3-codex",
+      "family": "gpt-5-codex",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Most capable Codex model for agentic coding tasks.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 1.75,
+        "cached_input_usd_per_1m_tokens": 0.175,
+        "output_usd_per_1m_tokens": 14
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 400000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "coding",
+        "codex",
+        "agentic",
+        "quality"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5.3-codex"
+    },
+    {
+      "id": "openai/gpt-5.2-codex",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5.2-codex",
+      "family": "gpt-5-codex",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "High-capability Codex model optimized for long-horizon agentic coding.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 1.75,
+        "cached_input_usd_per_1m_tokens": 0.175,
+        "output_usd_per_1m_tokens": 14
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 400000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "coding",
+        "codex",
+        "agentic",
+        "quality"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5.2-codex"
+    },
+    {
+      "id": "openai/gpt-5.1-codex",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5.1-codex",
+      "family": "gpt-5-codex",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "GPT-5.1 variant optimized for agentic coding in Codex.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 1.25,
+        "cached_input_usd_per_1m_tokens": 0.125,
+        "output_usd_per_1m_tokens": 10
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 400000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "coding",
+        "codex",
+        "agentic"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5.1-codex",
+      "source_note": "The official model page states that GPT-5.1-Codex is available in the Responses API only."
+    },
+    {
+      "id": "openai/gpt-5.1-codex-max",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5.1-codex-max",
+      "family": "gpt-5-codex",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "GPT-5.1 Codex variant optimized for longer-running coding tasks.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 1.25,
+        "cached_input_usd_per_1m_tokens": 0.125,
+        "output_usd_per_1m_tokens": 10
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 400000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "coding",
+        "codex",
+        "agentic",
+        "long-running"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5.1-codex-max",
+      "source_note": "The official model page states that GPT-5.1-Codex-Max is purpose-built for agentic coding and available in the Responses API only."
+    },
+    {
+      "id": "openai/gpt-5.1-codex-mini",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5.1-codex-mini",
+      "family": "gpt-5-codex",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Smaller, lower-cost Codex model based on GPT-5.1-Codex.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 0.25,
+        "cached_input_usd_per_1m_tokens": 0.025,
+        "output_usd_per_1m_tokens": 2
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 400000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "coding",
+        "codex",
+        "cost",
+        "fast"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5.1-codex-mini"
+    },
+    {
+      "id": "openai/gpt-5-codex",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5-codex",
+      "family": "gpt-5-codex",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "GPT-5 variant optimized for agentic coding in Codex.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 1.25,
+        "cached_input_usd_per_1m_tokens": 0.125,
+        "output_usd_per_1m_tokens": 10
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 400000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "coding",
+        "codex",
+        "agentic"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5-codex",
+      "source_note": "The official model page states that GPT-5-Codex is available in the Responses API only."
+    },
+    {
+      "id": "openai/codex-mini-latest",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "codex-mini-latest",
+      "family": "codex-mini",
+      "status": "deprecated",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Deprecated fast reasoning model optimized for the Codex CLI.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 1.5,
+        "cached_input_usd_per_1m_tokens": 0.375,
+        "output_usd_per_1m_tokens": 6
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 200000,
+      "max_output_tokens": 100000,
+      "tags": [
+        "coding",
+        "codex",
+        "fast",
+        "legacy"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/codex-mini-latest",
+      "availability_note": "Deprecated on the official model page."
     },
     {
       "id": "anthropic/claude-opus-4.6",

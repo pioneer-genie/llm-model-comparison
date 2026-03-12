@@ -74,6 +74,15 @@ test("listModels filters by provider", () => {
   assert.equal(models.every((model) => model.provider === "google"), true);
 });
 
+test("catalog includes OpenAI Codex models", () => {
+  const activeCodex = getModelById("openai/gpt-5.1-codex");
+  const deprecatedCodex = getModelById("openai/codex-mini-latest");
+
+  assert.equal(activeCodex?.status, "active");
+  assert.ok(activeCodex?.tags.includes("codex"));
+  assert.equal(deprecatedCodex?.status, "deprecated");
+});
+
 test("listModels filters by status", () => {
   const models = listModels({
     status: "deprecated"
