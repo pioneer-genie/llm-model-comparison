@@ -13,6 +13,66 @@
   ],
   "models": [
     {
+      "id": "openai/gpt-5.4",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5.4",
+      "family": "gpt-5",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Frontier GPT model for complex professional work.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 2.5,
+        "cached_input_usd_per_1m_tokens": 0.25,
+        "output_usd_per_1m_tokens": 15
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 1050000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "quality",
+        "reasoning",
+        "frontier"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5.4",
+      "source_note": "For GPT-5.4, prompts with more than 272K input tokens are priced at 2x input and 1.5x output for the full session. Regional processing endpoints are priced with a 10% uplift."
+    },
+    {
+      "id": "openai/gpt-5.4-pro",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5.4-pro",
+      "family": "gpt-5",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Higher-compute GPT-5.4 variant for more precise professional reasoning.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 30,
+        "output_usd_per_1m_tokens": 180
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 1050000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "quality",
+        "reasoning",
+        "pro",
+        "frontier"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5.4-pro",
+      "source_note": "The official model page lists input and output pricing in the crawled view. For GPT-5.4 pro, prompts with more than 272K input tokens are priced at 2x input and 1.5x output for the full session. Regional processing endpoints are priced with a 10% uplift."
+    },
+    {
       "id": "openai/gpt-5.2",
       "provider": "openai",
       "provider_label": "OpenAI",
@@ -69,6 +129,92 @@
       ],
       "source_url": "https://developers.openai.com/api/docs/models/gpt-5.2-pro",
       "source_note": "The official model page lists input and output pricing but does not surface a separate cached-input rate in the crawled view."
+    },
+    {
+      "id": "openai/gpt-5.1",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5.1",
+      "family": "gpt-5",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Flagship GPT model for coding and agentic tasks with configurable reasoning effort.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 1.25,
+        "cached_input_usd_per_1m_tokens": 0.125,
+        "output_usd_per_1m_tokens": 10
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 400000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "quality",
+        "reasoning",
+        "agentic"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5.1"
+    },
+    {
+      "id": "openai/gpt-5-pro",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5-pro",
+      "family": "gpt-5",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Higher-compute GPT-5 variant for smarter and more precise responses.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 15,
+        "output_usd_per_1m_tokens": 120
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 400000,
+      "max_output_tokens": 272000,
+      "tags": [
+        "quality",
+        "reasoning",
+        "pro"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5-pro",
+      "source_note": "The official model page lists input and output pricing in the crawled view but does not surface a separate cached-input rate."
+    },
+    {
+      "id": "openai/gpt-5",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5",
+      "family": "gpt-5",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Previous GPT-5 reasoning model for coding and agentic tasks across domains.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 1.25,
+        "cached_input_usd_per_1m_tokens": 0.125,
+        "output_usd_per_1m_tokens": 10
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 400000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "reasoning",
+        "agentic"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5"
     },
     {
       "id": "openai/gpt-5-mini",
