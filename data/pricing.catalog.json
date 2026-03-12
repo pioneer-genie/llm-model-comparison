@@ -1,15 +1,133 @@
 {
   "contract_version": "2026-03-12",
   "object": "pricing_catalog",
-  "catalog_name": "starter-seed",
+  "catalog_name": "official-text-model-pricing-curated",
   "currency": "USD",
   "unit": "usd_per_1m_tokens",
   "snapshot_date": "2026-03-12",
   "notes": [
-    "Starter seed data for local development and contract testing.",
-    "Verify each provider's official pricing before production use."
+    "Curated from official provider pricing pages on 2026-03-12.",
+    "Scope is general-purpose text-token inference pricing, not every specialized audio, image, realtime, chat-alias, or media-generation model.",
+    "pricing is the default comparison basis used by the CLI, API, and static workload views. When providers publish alternate tiers, batch discounts, or cache modifiers, those values are stored in pricing_tiers or extra pricing fields.",
+    "For Google models that publish separate audio rates, the structured pricing fields use the text/image/video token rates because the current comparison engine is text-token oriented."
   ],
   "models": [
+    {
+      "id": "openai/gpt-5.2",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5.2",
+      "family": "gpt-5",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Current flagship GPT-5 model for coding and agentic tasks across industries.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 1.75,
+        "cached_input_usd_per_1m_tokens": 0.175,
+        "output_usd_per_1m_tokens": 14
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 400000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "quality",
+        "reasoning",
+        "agentic"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5.2"
+    },
+    {
+      "id": "openai/gpt-5.2-pro",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5.2-pro",
+      "family": "gpt-5",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Higher-compute GPT-5.2 variant for tougher reasoning workloads.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 21,
+        "output_usd_per_1m_tokens": 168
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 400000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "quality",
+        "reasoning",
+        "pro"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5.2-pro",
+      "source_note": "The official model page lists input and output pricing but does not surface a separate cached-input rate in the crawled view."
+    },
+    {
+      "id": "openai/gpt-5-mini",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5-mini",
+      "family": "gpt-5",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Lower-cost GPT-5 model for well-defined tasks and precise prompts.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 0.25,
+        "cached_input_usd_per_1m_tokens": 0.025,
+        "output_usd_per_1m_tokens": 2
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 400000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "balanced",
+        "cost",
+        "reasoning"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5-mini"
+    },
+    {
+      "id": "openai/gpt-5-nano",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-5-nano",
+      "family": "gpt-5",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Fastest and cheapest GPT-5 model for classification and summarization style tasks.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 0.05,
+        "cached_input_usd_per_1m_tokens": 0.005,
+        "output_usd_per_1m_tokens": 0.4
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 400000,
+      "max_output_tokens": 128000,
+      "tags": [
+        "cost",
+        "fast",
+        "reasoning"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5-nano"
+    },
     {
       "id": "openai/gpt-4.1",
       "provider": "openai",
@@ -19,24 +137,24 @@
       "status": "active",
       "pricing_mode": "text_tokens",
       "last_verified_at": "2026-03-12",
-      "description": "Flagship general-purpose model.",
+      "description": "Highest-capability non-reasoning GPT model with a 1M token context window.",
       "modalities": [
         "text",
-        "vision"
+        "image"
       ],
       "pricing": {
         "input_usd_per_1m_tokens": 2,
         "cached_input_usd_per_1m_tokens": 0.5,
         "output_usd_per_1m_tokens": 8
       },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
       "context_window_tokens": 1047576,
       "max_output_tokens": 32768,
       "tags": [
-        "general",
-        "quality"
+        "quality",
+        "non-reasoning"
       ],
-      "source_url": "https://openai.com/api/pricing/",
-      "source_note": "Seed value for local comparison."
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-4.1"
     },
     {
       "id": "openai/gpt-4.1-mini",
@@ -47,24 +165,25 @@
       "status": "active",
       "pricing_mode": "text_tokens",
       "last_verified_at": "2026-03-12",
-      "description": "Lower-cost balanced model.",
+      "description": "Smaller GPT-4.1 variant with the same 1M token context window.",
       "modalities": [
         "text",
-        "vision"
+        "image"
       ],
       "pricing": {
         "input_usd_per_1m_tokens": 0.4,
         "cached_input_usd_per_1m_tokens": 0.1,
         "output_usd_per_1m_tokens": 1.6
       },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
       "context_window_tokens": 1047576,
       "max_output_tokens": 32768,
       "tags": [
         "balanced",
-        "cost"
+        "cost",
+        "non-reasoning"
       ],
-      "source_url": "https://openai.com/api/pricing/",
-      "source_note": "Seed value for local comparison."
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-4.1-mini"
     },
     {
       "id": "openai/gpt-4.1-nano",
@@ -75,77 +194,823 @@
       "status": "active",
       "pricing_mode": "text_tokens",
       "last_verified_at": "2026-03-12",
-      "description": "Ultra-low cost small model.",
+      "description": "Smallest GPT-4.1 model tuned for low latency and low cost.",
       "modalities": [
-        "text"
+        "text",
+        "image"
       ],
       "pricing": {
         "input_usd_per_1m_tokens": 0.1,
         "cached_input_usd_per_1m_tokens": 0.025,
         "output_usd_per_1m_tokens": 0.4
       },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
       "context_window_tokens": 1047576,
       "max_output_tokens": 32768,
       "tags": [
+        "cost",
         "fast",
-        "cost"
+        "non-reasoning"
       ],
-      "source_url": "https://openai.com/api/pricing/",
-      "source_note": "Seed value for local comparison."
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-4.1-nano"
     },
     {
-      "id": "anthropic/claude-3-7-sonnet",
-      "provider": "anthropic",
-      "provider_label": "Anthropic",
-      "model": "claude-3-7-sonnet",
-      "family": "claude-3",
+      "id": "openai/gpt-4o",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-4o",
+      "family": "gpt-4o",
       "status": "active",
       "pricing_mode": "text_tokens",
       "last_verified_at": "2026-03-12",
-      "description": "Reasoning-oriented model.",
+      "description": "Versatile multimodal GPT model for general-purpose workloads.",
       "modalities": [
         "text",
-        "vision"
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 2.5,
+        "cached_input_usd_per_1m_tokens": 1.25,
+        "output_usd_per_1m_tokens": 10
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 128000,
+      "max_output_tokens": 16384,
+      "tags": [
+        "quality",
+        "omni"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-4o"
+    },
+    {
+      "id": "openai/gpt-4o-mini",
+      "provider": "openai",
+      "provider_label": "OpenAI",
+      "model": "gpt-4o-mini",
+      "family": "gpt-4o",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Affordable GPT-4o variant for focused multimodal tasks.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 0.15,
+        "cached_input_usd_per_1m_tokens": 0.075,
+        "output_usd_per_1m_tokens": 0.6
+      },
+      "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+      "context_window_tokens": 128000,
+      "max_output_tokens": 16384,
+      "tags": [
+        "cost",
+        "fast",
+        "omni"
+      ],
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-4o-mini"
+    },
+    {
+      "id": "anthropic/claude-opus-4.6",
+      "provider": "anthropic",
+      "provider_label": "Anthropic",
+      "model": "claude-opus-4.6",
+      "family": "claude-opus-4",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Highest-end Claude Opus model with premium standard and long-context pricing.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 5,
+        "cached_input_usd_per_1m_tokens": 0.5,
+        "output_usd_per_1m_tokens": 25,
+        "cache_write_5m_usd_per_1m_tokens": 6.25,
+        "cache_write_1h_usd_per_1m_tokens": 10,
+        "batch_input_usd_per_1m_tokens": 2.5,
+        "batch_output_usd_per_1m_tokens": 12.5
+      },
+      "pricing_tiers": [
+        {
+          "id": "input_lte_200k",
+          "when": "Standard speed, global routing, requests with input <= 200K tokens.",
+          "pricing": {
+            "input_usd_per_1m_tokens": 5,
+            "cached_input_usd_per_1m_tokens": 0.5,
+            "output_usd_per_1m_tokens": 25,
+            "cache_write_5m_usd_per_1m_tokens": 6.25,
+            "cache_write_1h_usd_per_1m_tokens": 10,
+            "batch_input_usd_per_1m_tokens": 2.5,
+            "batch_output_usd_per_1m_tokens": 12.5
+          }
+        },
+        {
+          "id": "input_gt_200k",
+          "when": "Standard speed with 1M context window enabled and input > 200K tokens.",
+          "pricing": {
+            "input_usd_per_1m_tokens": 10,
+            "cached_input_usd_per_1m_tokens": 1,
+            "output_usd_per_1m_tokens": 37.5,
+            "cache_write_5m_usd_per_1m_tokens": 12.5,
+            "cache_write_1h_usd_per_1m_tokens": 20,
+            "batch_input_usd_per_1m_tokens": 5,
+            "batch_output_usd_per_1m_tokens": 18.75
+          }
+        }
+      ],
+      "comparison_pricing_basis": "Standard speed global pricing for requests with input <= 200K tokens.",
+      "tags": [
+        "quality",
+        "reasoning",
+        "tiered"
+      ],
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "source_note": "Claude Opus 4.6 also supports separately priced fast mode and 1.1x US-only inference pricing. Those modifiers are not used by the comparison engine."
+    },
+    {
+      "id": "anthropic/claude-opus-4.5",
+      "provider": "anthropic",
+      "provider_label": "Anthropic",
+      "model": "claude-opus-4.5",
+      "family": "claude-opus-4",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Current Claude Opus tier with premium pricing and standard caching support.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 5,
+        "cached_input_usd_per_1m_tokens": 0.5,
+        "output_usd_per_1m_tokens": 25,
+        "cache_write_5m_usd_per_1m_tokens": 6.25,
+        "cache_write_1h_usd_per_1m_tokens": 10,
+        "batch_input_usd_per_1m_tokens": 2.5,
+        "batch_output_usd_per_1m_tokens": 12.5
+      },
+      "comparison_pricing_basis": "Standard global pricing from the Claude API pricing table.",
+      "tags": [
+        "quality",
+        "reasoning"
+      ],
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing"
+    },
+    {
+      "id": "anthropic/claude-opus-4.1",
+      "provider": "anthropic",
+      "provider_label": "Anthropic",
+      "model": "claude-opus-4.1",
+      "family": "claude-opus-4",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Earlier Opus 4.x release that remains listed at the higher legacy Opus rate.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 15,
+        "cached_input_usd_per_1m_tokens": 1.5,
+        "output_usd_per_1m_tokens": 75,
+        "cache_write_5m_usd_per_1m_tokens": 18.75,
+        "cache_write_1h_usd_per_1m_tokens": 30,
+        "batch_input_usd_per_1m_tokens": 7.5,
+        "batch_output_usd_per_1m_tokens": 37.5
+      },
+      "comparison_pricing_basis": "Standard global pricing from the Claude API pricing table.",
+      "tags": [
+        "quality",
+        "legacy"
+      ],
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing"
+    },
+    {
+      "id": "anthropic/claude-opus-4",
+      "provider": "anthropic",
+      "provider_label": "Anthropic",
+      "model": "claude-opus-4",
+      "family": "claude-opus-4",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Original Claude Opus 4 release still listed at the higher legacy Opus rate.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 15,
+        "cached_input_usd_per_1m_tokens": 1.5,
+        "output_usd_per_1m_tokens": 75,
+        "cache_write_5m_usd_per_1m_tokens": 18.75,
+        "cache_write_1h_usd_per_1m_tokens": 30,
+        "batch_input_usd_per_1m_tokens": 7.5,
+        "batch_output_usd_per_1m_tokens": 37.5
+      },
+      "comparison_pricing_basis": "Standard global pricing from the Claude API pricing table.",
+      "tags": [
+        "quality",
+        "legacy"
+      ],
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing"
+    },
+    {
+      "id": "anthropic/claude-sonnet-4.6",
+      "provider": "anthropic",
+      "provider_label": "Anthropic",
+      "model": "claude-sonnet-4.6",
+      "family": "claude-sonnet-4",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Latest balanced Claude Sonnet tier with optional 1M-context long-context pricing.",
+      "modalities": [
+        "text",
+        "image"
       ],
       "pricing": {
         "input_usd_per_1m_tokens": 3,
-        "output_usd_per_1m_tokens": 15
+        "cached_input_usd_per_1m_tokens": 0.3,
+        "output_usd_per_1m_tokens": 15,
+        "cache_write_5m_usd_per_1m_tokens": 3.75,
+        "cache_write_1h_usd_per_1m_tokens": 6,
+        "batch_input_usd_per_1m_tokens": 1.5,
+        "batch_output_usd_per_1m_tokens": 7.5
       },
-      "context_window_tokens": 200000,
-      "max_output_tokens": 8192,
-      "tags": [
-        "reasoning",
-        "quality"
+      "pricing_tiers": [
+        {
+          "id": "input_lte_200k",
+          "when": "Standard speed, global routing, requests with input <= 200K tokens.",
+          "pricing": {
+            "input_usd_per_1m_tokens": 3,
+            "cached_input_usd_per_1m_tokens": 0.3,
+            "output_usd_per_1m_tokens": 15,
+            "cache_write_5m_usd_per_1m_tokens": 3.75,
+            "cache_write_1h_usd_per_1m_tokens": 6,
+            "batch_input_usd_per_1m_tokens": 1.5,
+            "batch_output_usd_per_1m_tokens": 7.5
+          }
+        },
+        {
+          "id": "input_gt_200k",
+          "when": "Standard speed with 1M context window enabled and input > 200K tokens.",
+          "pricing": {
+            "input_usd_per_1m_tokens": 6,
+            "cached_input_usd_per_1m_tokens": 0.6,
+            "output_usd_per_1m_tokens": 22.5,
+            "cache_write_5m_usd_per_1m_tokens": 7.5,
+            "cache_write_1h_usd_per_1m_tokens": 12,
+            "batch_input_usd_per_1m_tokens": 3,
+            "batch_output_usd_per_1m_tokens": 11.25
+          }
+        }
       ],
-      "source_url": "https://www.anthropic.com/pricing",
-      "source_note": "Seed value for local comparison."
+      "comparison_pricing_basis": "Standard speed global pricing for requests with input <= 200K tokens.",
+      "tags": [
+        "balanced",
+        "reasoning",
+        "tiered"
+      ],
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing"
     },
     {
-      "id": "anthropic/claude-3.5-haiku",
+      "id": "anthropic/claude-sonnet-4.5",
       "provider": "anthropic",
       "provider_label": "Anthropic",
-      "model": "claude-3.5-haiku",
-      "family": "claude-3.5",
+      "model": "claude-sonnet-4.5",
+      "family": "claude-sonnet-4",
       "status": "active",
       "pricing_mode": "text_tokens",
       "last_verified_at": "2026-03-12",
-      "description": "Fast, cost-focused model.",
+      "description": "Balanced Claude Sonnet tier with the same base pricing as Sonnet 4.6.",
       "modalities": [
         "text",
-        "vision"
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 3,
+        "cached_input_usd_per_1m_tokens": 0.3,
+        "output_usd_per_1m_tokens": 15,
+        "cache_write_5m_usd_per_1m_tokens": 3.75,
+        "cache_write_1h_usd_per_1m_tokens": 6,
+        "batch_input_usd_per_1m_tokens": 1.5,
+        "batch_output_usd_per_1m_tokens": 7.5
+      },
+      "pricing_tiers": [
+        {
+          "id": "input_lte_200k",
+          "when": "Standard speed, global routing, requests with input <= 200K tokens.",
+          "pricing": {
+            "input_usd_per_1m_tokens": 3,
+            "cached_input_usd_per_1m_tokens": 0.3,
+            "output_usd_per_1m_tokens": 15,
+            "cache_write_5m_usd_per_1m_tokens": 3.75,
+            "cache_write_1h_usd_per_1m_tokens": 6,
+            "batch_input_usd_per_1m_tokens": 1.5,
+            "batch_output_usd_per_1m_tokens": 7.5
+          }
+        },
+        {
+          "id": "input_gt_200k",
+          "when": "Standard speed with 1M context window enabled and input > 200K tokens.",
+          "pricing": {
+            "input_usd_per_1m_tokens": 6,
+            "cached_input_usd_per_1m_tokens": 0.6,
+            "output_usd_per_1m_tokens": 22.5,
+            "cache_write_5m_usd_per_1m_tokens": 7.5,
+            "cache_write_1h_usd_per_1m_tokens": 12,
+            "batch_input_usd_per_1m_tokens": 3,
+            "batch_output_usd_per_1m_tokens": 11.25
+          }
+        }
+      ],
+      "comparison_pricing_basis": "Standard speed global pricing for requests with input <= 200K tokens.",
+      "tags": [
+        "balanced",
+        "reasoning",
+        "tiered"
+      ],
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing"
+    },
+    {
+      "id": "anthropic/claude-sonnet-4",
+      "provider": "anthropic",
+      "provider_label": "Anthropic",
+      "model": "claude-sonnet-4",
+      "family": "claude-sonnet-4",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Original Sonnet 4 release with base and long-context pricing tiers.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 3,
+        "cached_input_usd_per_1m_tokens": 0.3,
+        "output_usd_per_1m_tokens": 15,
+        "cache_write_5m_usd_per_1m_tokens": 3.75,
+        "cache_write_1h_usd_per_1m_tokens": 6,
+        "batch_input_usd_per_1m_tokens": 1.5,
+        "batch_output_usd_per_1m_tokens": 7.5
+      },
+      "pricing_tiers": [
+        {
+          "id": "input_lte_200k",
+          "when": "Standard speed, global routing, requests with input <= 200K tokens.",
+          "pricing": {
+            "input_usd_per_1m_tokens": 3,
+            "cached_input_usd_per_1m_tokens": 0.3,
+            "output_usd_per_1m_tokens": 15,
+            "cache_write_5m_usd_per_1m_tokens": 3.75,
+            "cache_write_1h_usd_per_1m_tokens": 6,
+            "batch_input_usd_per_1m_tokens": 1.5,
+            "batch_output_usd_per_1m_tokens": 7.5
+          }
+        },
+        {
+          "id": "input_gt_200k",
+          "when": "Standard speed with 1M context window enabled and input > 200K tokens.",
+          "pricing": {
+            "input_usd_per_1m_tokens": 6,
+            "cached_input_usd_per_1m_tokens": 0.6,
+            "output_usd_per_1m_tokens": 22.5,
+            "cache_write_5m_usd_per_1m_tokens": 7.5,
+            "cache_write_1h_usd_per_1m_tokens": 12,
+            "batch_input_usd_per_1m_tokens": 3,
+            "batch_output_usd_per_1m_tokens": 11.25
+          }
+        }
+      ],
+      "comparison_pricing_basis": "Standard speed global pricing for requests with input <= 200K tokens.",
+      "tags": [
+        "balanced",
+        "reasoning",
+        "tiered"
+      ],
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing"
+    },
+    {
+      "id": "anthropic/claude-sonnet-3.7",
+      "provider": "anthropic",
+      "provider_label": "Anthropic",
+      "model": "claude-sonnet-3.7",
+      "family": "claude-sonnet-3",
+      "status": "deprecated",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Deprecated Sonnet model that remains listed for migration and reference.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 3,
+        "cached_input_usd_per_1m_tokens": 0.3,
+        "output_usd_per_1m_tokens": 15,
+        "cache_write_5m_usd_per_1m_tokens": 3.75,
+        "cache_write_1h_usd_per_1m_tokens": 6,
+        "batch_input_usd_per_1m_tokens": 1.5,
+        "batch_output_usd_per_1m_tokens": 7.5
+      },
+      "comparison_pricing_basis": "Standard global pricing from the Claude API pricing table.",
+      "tags": [
+        "balanced",
+        "reasoning",
+        "legacy"
+      ],
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "availability_note": "Deprecated on the official Claude pricing page."
+    },
+    {
+      "id": "anthropic/claude-haiku-4.5",
+      "provider": "anthropic",
+      "provider_label": "Anthropic",
+      "model": "claude-haiku-4.5",
+      "family": "claude-haiku-4",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Current low-cost Claude Haiku model for throughput-oriented workloads.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 1,
+        "cached_input_usd_per_1m_tokens": 0.1,
+        "output_usd_per_1m_tokens": 5,
+        "cache_write_5m_usd_per_1m_tokens": 1.25,
+        "cache_write_1h_usd_per_1m_tokens": 2,
+        "batch_input_usd_per_1m_tokens": 0.5,
+        "batch_output_usd_per_1m_tokens": 2.5
+      },
+      "comparison_pricing_basis": "Standard global pricing from the Claude API pricing table.",
+      "tags": [
+        "cost",
+        "fast"
+      ],
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing"
+    },
+    {
+      "id": "anthropic/claude-haiku-3.5",
+      "provider": "anthropic",
+      "provider_label": "Anthropic",
+      "model": "claude-haiku-3.5",
+      "family": "claude-haiku-3",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Earlier Haiku tier that remains listed as a low-cost Claude option.",
+      "modalities": [
+        "text",
+        "image"
       ],
       "pricing": {
         "input_usd_per_1m_tokens": 0.8,
-        "output_usd_per_1m_tokens": 4
+        "cached_input_usd_per_1m_tokens": 0.08,
+        "output_usd_per_1m_tokens": 4,
+        "cache_write_5m_usd_per_1m_tokens": 1,
+        "cache_write_1h_usd_per_1m_tokens": 1.6,
+        "batch_input_usd_per_1m_tokens": 0.4,
+        "batch_output_usd_per_1m_tokens": 2
       },
-      "context_window_tokens": 200000,
-      "max_output_tokens": 8192,
+      "comparison_pricing_basis": "Standard global pricing from the Claude API pricing table.",
       "tags": [
-        "fast",
-        "cost"
+        "cost",
+        "fast"
       ],
-      "source_url": "https://www.anthropic.com/pricing",
-      "source_note": "Seed value for local comparison."
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing"
+    },
+    {
+      "id": "anthropic/claude-opus-3",
+      "provider": "anthropic",
+      "provider_label": "Anthropic",
+      "model": "claude-opus-3",
+      "family": "claude-opus-3",
+      "status": "deprecated",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Deprecated Claude Opus 3 pricing retained for historical comparison.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 15,
+        "cached_input_usd_per_1m_tokens": 1.5,
+        "output_usd_per_1m_tokens": 75,
+        "cache_write_5m_usd_per_1m_tokens": 18.75,
+        "cache_write_1h_usd_per_1m_tokens": 30,
+        "batch_input_usd_per_1m_tokens": 7.5,
+        "batch_output_usd_per_1m_tokens": 37.5
+      },
+      "comparison_pricing_basis": "Standard global pricing from the Claude API pricing table.",
+      "tags": [
+        "quality",
+        "legacy"
+      ],
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "availability_note": "Deprecated on the official Claude pricing page."
+    },
+    {
+      "id": "anthropic/claude-haiku-3",
+      "provider": "anthropic",
+      "provider_label": "Anthropic",
+      "model": "claude-haiku-3",
+      "family": "claude-haiku-3",
+      "status": "deprecated",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Deprecated Haiku pricing retained for historical cost baselines.",
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 0.25,
+        "cached_input_usd_per_1m_tokens": 0.03,
+        "output_usd_per_1m_tokens": 1.25,
+        "cache_write_5m_usd_per_1m_tokens": 0.3,
+        "cache_write_1h_usd_per_1m_tokens": 0.5,
+        "batch_input_usd_per_1m_tokens": 0.125,
+        "batch_output_usd_per_1m_tokens": 0.625
+      },
+      "comparison_pricing_basis": "Standard global pricing from the Claude API pricing table.",
+      "tags": [
+        "cost",
+        "fast",
+        "legacy"
+      ],
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "availability_note": "Deprecated on the official Claude pricing page."
+    },
+    {
+      "id": "google/gemini-3.1-pro-preview",
+      "provider": "google",
+      "provider_label": "Google",
+      "model": "gemini-3.1-pro-preview",
+      "family": "gemini-3.1",
+      "status": "preview",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Latest Gemini Pro preview with prompt-length tiered pricing.",
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 2,
+        "cached_input_usd_per_1m_tokens": 0.2,
+        "output_usd_per_1m_tokens": 12,
+        "batch_input_usd_per_1m_tokens": 1,
+        "batch_cached_input_usd_per_1m_tokens": 0.2,
+        "batch_output_usd_per_1m_tokens": 6,
+        "cache_storage_usd_per_1m_tokens_per_hour": 4.5
+      },
+      "pricing_tiers": [
+        {
+          "id": "prompts_lte_200k",
+          "when": "Standard and batch prompt pricing for prompts <= 200K tokens.",
+          "pricing": {
+            "input_usd_per_1m_tokens": 2,
+            "cached_input_usd_per_1m_tokens": 0.2,
+            "output_usd_per_1m_tokens": 12,
+            "batch_input_usd_per_1m_tokens": 1,
+            "batch_cached_input_usd_per_1m_tokens": 0.2,
+            "batch_output_usd_per_1m_tokens": 6,
+            "cache_storage_usd_per_1m_tokens_per_hour": 4.5
+          }
+        },
+        {
+          "id": "prompts_gt_200k",
+          "when": "Standard and batch prompt pricing for prompts > 200K tokens.",
+          "pricing": {
+            "input_usd_per_1m_tokens": 4,
+            "cached_input_usd_per_1m_tokens": 0.4,
+            "output_usd_per_1m_tokens": 18,
+            "batch_input_usd_per_1m_tokens": 2,
+            "batch_cached_input_usd_per_1m_tokens": 0.4,
+            "batch_output_usd_per_1m_tokens": 9,
+            "cache_storage_usd_per_1m_tokens_per_hour": 4.5
+          }
+        }
+      ],
+      "comparison_pricing_basis": "Paid standard text-token pricing for prompts <= 200K tokens.",
+      "tags": [
+        "quality",
+        "reasoning",
+        "preview",
+        "tiered"
+      ],
+      "source_url": "https://ai.google.dev/gemini-api/docs/pricing"
+    },
+    {
+      "id": "google/gemini-3.1-flash-lite-preview",
+      "provider": "google",
+      "provider_label": "Google",
+      "model": "gemini-3.1-flash-lite-preview",
+      "family": "gemini-3.1",
+      "status": "preview",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Cost-efficient Gemini 3.1 preview for high-volume agentic tasks and translation.",
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 0.25,
+        "cached_input_usd_per_1m_tokens": 0.025,
+        "output_usd_per_1m_tokens": 1.5,
+        "batch_input_usd_per_1m_tokens": 0.125,
+        "batch_cached_input_usd_per_1m_tokens": 0.0125,
+        "batch_output_usd_per_1m_tokens": 0.75,
+        "cache_storage_usd_per_1m_tokens_per_hour": 1
+      },
+      "comparison_pricing_basis": "Paid standard text/image/video token pricing from the Gemini pricing page.",
+      "tags": [
+        "cost",
+        "fast",
+        "preview"
+      ],
+      "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "source_note": "The official pricing page lists higher audio token rates; this catalog uses text/image/video rates for comparison."
+    },
+    {
+      "id": "google/gemini-3-flash-preview",
+      "provider": "google",
+      "provider_label": "Google",
+      "model": "gemini-3-flash-preview",
+      "family": "gemini-3",
+      "status": "preview",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Fast Gemini preview model focused on grounding and high-throughput reasoning.",
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 0.5,
+        "cached_input_usd_per_1m_tokens": 0.05,
+        "output_usd_per_1m_tokens": 3,
+        "batch_input_usd_per_1m_tokens": 0.25,
+        "batch_cached_input_usd_per_1m_tokens": 0.05,
+        "batch_output_usd_per_1m_tokens": 1.5,
+        "cache_storage_usd_per_1m_tokens_per_hour": 1
+      },
+      "comparison_pricing_basis": "Paid standard text/image/video token pricing from the Gemini pricing page.",
+      "tags": [
+        "balanced",
+        "fast",
+        "preview",
+        "reasoning"
+      ],
+      "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "source_note": "The official pricing page lists higher audio token rates and notes that batch cached-input pricing remains the same as standard."
+    },
+    {
+      "id": "google/gemini-2.5-pro",
+      "provider": "google",
+      "provider_label": "Google",
+      "model": "gemini-2.5-pro",
+      "family": "gemini-2.5",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "State-of-the-art Gemini 2.5 model for coding and complex reasoning tasks.",
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 1.25,
+        "cached_input_usd_per_1m_tokens": 0.125,
+        "output_usd_per_1m_tokens": 10,
+        "batch_input_usd_per_1m_tokens": 0.625,
+        "batch_cached_input_usd_per_1m_tokens": 0.125,
+        "batch_output_usd_per_1m_tokens": 5,
+        "cache_storage_usd_per_1m_tokens_per_hour": 4.5
+      },
+      "pricing_tiers": [
+        {
+          "id": "prompts_lte_200k",
+          "when": "Standard and batch prompt pricing for prompts <= 200K tokens.",
+          "pricing": {
+            "input_usd_per_1m_tokens": 1.25,
+            "cached_input_usd_per_1m_tokens": 0.125,
+            "output_usd_per_1m_tokens": 10,
+            "batch_input_usd_per_1m_tokens": 0.625,
+            "batch_cached_input_usd_per_1m_tokens": 0.125,
+            "batch_output_usd_per_1m_tokens": 5,
+            "cache_storage_usd_per_1m_tokens_per_hour": 4.5
+          }
+        },
+        {
+          "id": "prompts_gt_200k",
+          "when": "Standard and batch prompt pricing for prompts > 200K tokens.",
+          "pricing": {
+            "input_usd_per_1m_tokens": 2.5,
+            "cached_input_usd_per_1m_tokens": 0.25,
+            "output_usd_per_1m_tokens": 15,
+            "batch_input_usd_per_1m_tokens": 1.25,
+            "batch_cached_input_usd_per_1m_tokens": 0.25,
+            "batch_output_usd_per_1m_tokens": 7.5,
+            "cache_storage_usd_per_1m_tokens_per_hour": 4.5
+          }
+        }
+      ],
+      "comparison_pricing_basis": "Paid standard text-token pricing for prompts <= 200K tokens.",
+      "tags": [
+        "quality",
+        "reasoning",
+        "tiered"
+      ],
+      "source_url": "https://ai.google.dev/gemini-api/docs/pricing"
+    },
+    {
+      "id": "google/gemini-2.5-flash",
+      "provider": "google",
+      "provider_label": "Google",
+      "model": "gemini-2.5-flash",
+      "family": "gemini-2.5",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Hybrid reasoning Gemini model with a 1M token context window.",
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 0.3,
+        "cached_input_usd_per_1m_tokens": 0.03,
+        "output_usd_per_1m_tokens": 2.5,
+        "batch_input_usd_per_1m_tokens": 0.15,
+        "batch_cached_input_usd_per_1m_tokens": 0.03,
+        "batch_output_usd_per_1m_tokens": 1.25,
+        "cache_storage_usd_per_1m_tokens_per_hour": 1
+      },
+      "comparison_pricing_basis": "Paid standard text/image/video token pricing from the Gemini pricing page.",
+      "tags": [
+        "balanced",
+        "reasoning",
+        "large-context"
+      ],
+      "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "source_note": "The official pricing page lists higher audio token rates; this catalog uses text/image/video rates for comparison."
+    },
+    {
+      "id": "google/gemini-2.5-flash-lite",
+      "provider": "google",
+      "provider_label": "Google",
+      "model": "gemini-2.5-flash-lite",
+      "family": "gemini-2.5",
+      "status": "active",
+      "pricing_mode": "text_tokens",
+      "last_verified_at": "2026-03-12",
+      "description": "Smallest stable Gemini 2.5 model built for high-scale, low-cost usage.",
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "pricing": {
+        "input_usd_per_1m_tokens": 0.1,
+        "cached_input_usd_per_1m_tokens": 0.01,
+        "output_usd_per_1m_tokens": 0.4,
+        "batch_input_usd_per_1m_tokens": 0.05,
+        "batch_cached_input_usd_per_1m_tokens": 0.01,
+        "batch_output_usd_per_1m_tokens": 0.2,
+        "cache_storage_usd_per_1m_tokens_per_hour": 1
+      },
+      "comparison_pricing_basis": "Paid standard text/image/video token pricing from the Gemini pricing page.",
+      "tags": [
+        "cost",
+        "fast"
+      ],
+      "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "source_note": "The official pricing page lists higher audio token rates; this catalog uses text/image/video rates for comparison."
     },
     {
       "id": "google/gemini-2.0-flash",
@@ -153,55 +1018,63 @@
       "provider_label": "Google",
       "model": "gemini-2.0-flash",
       "family": "gemini-2.0",
-      "status": "active",
+      "status": "deprecated",
       "pricing_mode": "text_tokens",
       "last_verified_at": "2026-03-12",
-      "description": "High-throughput low-latency model.",
+      "description": "Deprecated Gemini Flash model retained for migration and historical comparison.",
       "modalities": [
         "text",
-        "vision",
-        "audio"
+        "image",
+        "audio",
+        "video"
       ],
       "pricing": {
         "input_usd_per_1m_tokens": 0.1,
-        "output_usd_per_1m_tokens": 0.4
+        "cached_input_usd_per_1m_tokens": 0.025,
+        "output_usd_per_1m_tokens": 0.4,
+        "batch_input_usd_per_1m_tokens": 0.05,
+        "batch_cached_input_usd_per_1m_tokens": 0.025,
+        "batch_output_usd_per_1m_tokens": 0.2,
+        "cache_storage_usd_per_1m_tokens_per_hour": 1
       },
-      "context_window_tokens": 1048576,
-      "max_output_tokens": 8192,
+      "comparison_pricing_basis": "Paid standard text/image/video token pricing from the Gemini pricing page.",
       "tags": [
+        "balanced",
         "fast",
-        "balanced"
+        "legacy"
       ],
       "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
-      "source_note": "Seed value for local comparison."
+      "source_note": "The official pricing page lists higher audio token rates; this catalog uses text/image/video rates for comparison.",
+      "availability_note": "Deprecated and scheduled to shut down on 2026-06-01."
     },
     {
-      "id": "google/gemini-1.5-pro",
+      "id": "google/gemini-2.0-flash-lite",
       "provider": "google",
       "provider_label": "Google",
-      "model": "gemini-1.5-pro",
-      "family": "gemini-1.5",
-      "status": "active",
+      "model": "gemini-2.0-flash-lite",
+      "family": "gemini-2.0",
+      "status": "deprecated",
       "pricing_mode": "text_tokens",
       "last_verified_at": "2026-03-12",
-      "description": "Higher quality large-context model.",
+      "description": "Deprecated low-cost Gemini Flash-Lite model retained for migration and history.",
       "modalities": [
         "text",
-        "vision",
-        "audio"
+        "image"
       ],
       "pricing": {
-        "input_usd_per_1m_tokens": 1.25,
-        "output_usd_per_1m_tokens": 5
+        "input_usd_per_1m_tokens": 0.075,
+        "output_usd_per_1m_tokens": 0.3,
+        "batch_input_usd_per_1m_tokens": 0.0375,
+        "batch_output_usd_per_1m_tokens": 0.15
       },
-      "context_window_tokens": 2097152,
-      "max_output_tokens": 8192,
+      "comparison_pricing_basis": "Paid standard text-token pricing from the Gemini pricing page.",
       "tags": [
-        "quality",
-        "large-context"
+        "cost",
+        "fast",
+        "legacy"
       ],
       "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
-      "source_note": "Seed value for local comparison."
+      "availability_note": "Deprecated and scheduled to shut down on 2026-06-01."
     }
   ]
 }

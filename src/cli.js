@@ -123,8 +123,8 @@ function printHelp() {
     "Commands:",
     "  list [--provider openai] [--status active] [--tag cost] [--format json|table]",
     "  show <model_id>",
-    "  compare --models id1,id2 --input-tokens 1000000 --output-tokens 250000",
-    "  analyze --input-tokens 1000000 --output-tokens 250000 [--budget-usd 2]",
+    "  compare --models id1,id2 --input-tokens 1000000 --output-tokens 250000 [--status active]",
+    "  analyze --input-tokens 1000000 --output-tokens 250000 [--budget-usd 2] [--status active]",
     "  catalog",
     "  contract",
     "  serve [--port 3030] [--host 127.0.0.1]"

@@ -152,6 +152,9 @@ export async function buildStaticSite(options = {}) {
       data: {
         preset,
         analysis: analyzeModelsInCatalog(catalog, {
+          filters: {
+            status: "active"
+          },
           workload: preset.workload,
           top_k: catalog.models.length
         })

@@ -6,24 +6,25 @@ import { createRequestHandler } from "../src/server.js";
 test("GET /v1/models returns filtered list envelope", async () => {
   const response = await invokeRoute({
     method: "GET",
-    url: "/v1/models?provider=openai"
+    url: "/v1/models?provider=openai&status=active"
   });
 
   assert.equal(response.statusCode, 200);
   assert.equal(response.body.object, "list");
-  assert.equal(response.body.meta.count, 3);
+  assert.ok(response.body.meta.count >= 5);
   assert.equal(response.body.data.every((model) => model.provider === "openai"), true);
+  assert.equal(response.body.data.every((model) => model.status === "active"), true);
 });
 
 test("GET /v1/models?id=... returns one model", async () => {
   const response = await invokeRoute({
     method: "GET",
-    url: "/v1/models?id=openai/gpt-4.1-mini"
+    url: "/v1/models?id=openai/gpt-5-mini"
   });
 
   assert.equal(response.statusCode, 200);
   assert.equal(response.body.object, "model");
-  assert.equal(response.body.data.id, "openai/gpt-4.1-mini");
+  assert.equal(response.body.data.id, "openai/gpt-5-mini");
 });
 
 test("POST /v1/compare returns ranked price comparison", async () => {
@@ -31,7 +32,7 @@ test("POST /v1/compare returns ranked price comparison", async () => {
     method: "POST",
     url: "/v1/compare",
     body: {
-      model_ids: ["openai/gpt-4.1-mini", "google/gemini-2.0-flash"],
+      model_ids: ["openai/gpt-5-mini", "google/gemini-2.5-flash-lite"],
       workload: {
         input_tokens: 1_000_000,
         output_tokens: 250_000
@@ -41,7 +42,7 @@ test("POST /v1/compare returns ranked price comparison", async () => {
 
   assert.equal(response.statusCode, 200);
   assert.equal(response.body.object, "price_comparison");
-  assert.equal(response.body.data.comparisons[0].model_id, "google/gemini-2.0-flash");
+  assert.equal(response.body.data.comparisons[0].model_id, "google/gemini-2.5-flash-lite");
 });
 
 test("unknown route returns 404 envelope", async () => {

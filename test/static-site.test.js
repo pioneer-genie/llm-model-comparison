@@ -10,7 +10,7 @@ test("buildStaticSite writes raw documents and generated views", async () => {
   const outDir = await mkdtemp(join(tmpdir(), "llm-model-comparison-"));
   const result = await buildStaticSite({ outDir });
 
-  assert.equal(result.modelCount >= 7, true);
+  assert.equal(result.modelCount >= 20, true);
 
   const [catalogJson, apiIndexJson, balancedJson] = await Promise.all([
     readFile(join(outDir, "data/pricing.catalog.json"), "utf8"),
@@ -30,7 +30,7 @@ test("buildStaticSite writes raw documents and generated views", async () => {
   assert.equal(apiIndex.data.summary.latest_verified_at, "2026-03-12");
   assert.equal(
     balanced.data.analysis.summary.cheapest_overall_model_id,
-    "google/gemini-2.0-flash"
+    "openai/gpt-5-nano"
   );
 
   const [snapshotIndexJson, activeStatusJson, pricingModeJson, snapshotCatalogJson] = await Promise.all([

@@ -4,6 +4,15 @@ export const MODEL_STATUSES = new Set(["active", "preview", "deprecated"]);
 export const PRICING_MODES = new Set(["text_tokens", "embeddings", "image", "audio"]);
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const HTTP_URL_PATTERN = /^https?:\/\/\S+$/;
+const OPTIONAL_PRICING_NUMBER_FIELDS = [
+  "cached_input_usd_per_1m_tokens",
+  "batch_input_usd_per_1m_tokens",
+  "batch_cached_input_usd_per_1m_tokens",
+  "batch_output_usd_per_1m_tokens",
+  "cache_write_5m_usd_per_1m_tokens",
+  "cache_write_1h_usd_per_1m_tokens",
+  "cache_storage_usd_per_1m_tokens_per_hour"
+];
 
 export function assertCatalogShape(catalog) {
   if (!catalog || catalog.object !== "pricing_catalog") {
@@ -33,19 +42,29 @@ export function assertCatalogShape(catalog) {
     assertHttpUrl(model.source_url, `${basePath}.source_url`);
     assertString(model?.last_verified_at, `${basePath}.last_verified_at`);
     assertIsoDate(model.last_verified_at, `${basePath}.last_verified_at`);
+    assertOptionalString(model?.comparison_pricing_basis, `${basePath}.comparison_pricing_basis`);
+    assertOptionalString(model?.source_note, `${basePath}.source_note`);
+    assertOptionalString(model?.availability_note, `${basePath}.availability_note`);
 
     if (seenIds.has(model.id)) {
       throw new Error(`${basePath}.id must be unique.`);
     }
     seenIds.add(model.id);
 
-    const pricing = model?.pricing;
-    if (!pricing || typeof pricing !== "object") {
-      throw new Error(`${basePath}.pricing must be an object.`);
-    }
+    assertPricingShape(model?.pricing, `${basePath}.pricing`);
 
-    assertNumber(pricing.input_usd_per_1m_tokens, `${basePath}.pricing.input_usd_per_1m_tokens`);
-    assertNumber(pricing.output_usd_per_1m_tokens, `${basePath}.pricing.output_usd_per_1m_tokens`);
+    if (model.pricing_tiers !== undefined) {
+      if (!Array.isArray(model.pricing_tiers) || model.pricing_tiers.length === 0) {
+        throw new Error(`${basePath}.pricing_tiers must be a non-empty array when present.`);
+      }
+
+      for (const tier of model.pricing_tiers) {
+        const tierPath = `${basePath}.pricing_tiers.${tier?.id ?? "<unknown>"}`;
+        assertString(tier?.id, `${tierPath}.id`);
+        assertString(tier?.when, `${tierPath}.when`);
+        assertPricingShape(tier?.pricing, `${tierPath}.pricing`);
+      }
+    }
   }
 }
 
@@ -87,9 +106,32 @@ function assertString(value, fieldName) {
   }
 }
 
+function assertOptionalString(value, fieldName) {
+  if (value === undefined) {
+    return;
+  }
+
+  assertString(value, fieldName);
+}
+
 function assertNumber(value, fieldName) {
   if (typeof value !== "number" || Number.isNaN(value) || value < 0) {
     throw new Error(`${fieldName} must be a non-negative number.`);
+  }
+}
+
+function assertPricingShape(pricing, fieldName) {
+  if (!pricing || typeof pricing !== "object") {
+    throw new Error(`${fieldName} must be an object.`);
+  }
+
+  assertNumber(pricing.input_usd_per_1m_tokens, `${fieldName}.input_usd_per_1m_tokens`);
+  assertNumber(pricing.output_usd_per_1m_tokens, `${fieldName}.output_usd_per_1m_tokens`);
+
+  for (const optionalField of OPTIONAL_PRICING_NUMBER_FIELDS) {
+    if (pricing[optionalField] !== undefined) {
+      assertNumber(pricing[optionalField], `${fieldName}.${optionalField}`);
+    }
   }
 }
 

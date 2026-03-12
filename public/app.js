@@ -87,6 +87,7 @@ function renderModelOptions() {
   ]);
   const models = listModelsInCatalog(state.catalog, {
     provider: elements.providerFilter.value || undefined,
+    status: "active",
     sort_by: "id"
   });
 
@@ -143,7 +144,8 @@ function renderPresetCards(apiIndex) {
 
 function renderComparison() {
   const filters = {
-    provider: elements.providerFilter.value || undefined
+    provider: elements.providerFilter.value || undefined,
+    status: "active"
   };
   const selectedModels = getSelectedModels();
   const input = {
@@ -186,6 +188,7 @@ function renderResults(comparisons) {
     .map((item) => `
       <tr>
         <td><code>${escapeHtml(item.model_id)}</code></td>
+        <td>${escapeHtml(item.status)}</td>
         <td>${formatUsd(item.estimated_total_cost_usd)}</td>
         <td>${formatUsd(item.rates.input_usd_per_1m_tokens)}</td>
         <td>${formatUsd(item.rates.output_usd_per_1m_tokens)}</td>

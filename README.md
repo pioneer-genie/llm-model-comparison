@@ -42,16 +42,17 @@ test/analysis.test.js              # 기본 검증
 
 ```json
 {
-  "id": "openai/gpt-4.1-mini",
+  "id": "openai/gpt-5-mini",
   "provider": "openai",
-  "model": "gpt-4.1-mini",
+  "model": "gpt-5-mini",
   "status": "active",
   "pricing_mode": "text_tokens",
   "last_verified_at": "2026-03-12",
+  "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
   "pricing": {
-    "input_usd_per_1m_tokens": 0.4,
-    "cached_input_usd_per_1m_tokens": 0.1,
-    "output_usd_per_1m_tokens": 1.6
+    "input_usd_per_1m_tokens": 0.25,
+    "cached_input_usd_per_1m_tokens": 0.025,
+    "output_usd_per_1m_tokens": 2
   }
 }
 ```
@@ -64,6 +65,14 @@ test/analysis.test.js              # 기본 검증
 - `pricing_mode`: 현재는 `text_tokens`
 - `last_verified_at`: `YYYY-MM-DD`
 - `source_url`: 공식 가격 확인 링크
+- `comparison_pricing_basis`: 현재 compare/analyze가 어떤 기본 rate를 쓰는지 설명
+
+필요하면 아래 확장 필드도 같이 넣습니다.
+
+- `pricing_tiers`: prompt 길이, long context 같은 대체 rate card
+- `pricing.batch_*`: batch 할인 가격
+- `pricing.cache_write_*`, `pricing.cache_storage_*`: provider별 cache write/storage 가격
+- `availability_note`: deprecated, shutdown 예정일 같은 운영 메타
 
 이 필드들이 있어야 나중에 가격 최신성과 모델 상태를 함께 해석할 수 있습니다.
 
@@ -81,22 +90,23 @@ npm test
 
 ```bash
 node src/cli.js list
-node src/cli.js show openai/gpt-4.1-mini
+node src/cli.js show openai/gpt-5-mini
 node src/cli.js compare \
-  --models openai/gpt-4.1-mini,google/gemini-2.0-flash \
+  --models openai/gpt-5-mini,google/gemini-2.5-flash-lite \
   --input-tokens 1000000 \
   --output-tokens 250000
 node src/cli.js analyze \
   --input-tokens 1000000 \
   --output-tokens 250000 \
-  --budget-usd 2
+  --budget-usd 1 \
+  --status active
 ```
 
 사람이 보기 편한 테이블도 지원합니다.
 
 ```bash
 node src/cli.js list --format table
-node src/cli.js compare --models openai/gpt-4.1-mini,google/gemini-2.0-flash --input-tokens 1000000 --output-tokens 250000 --format table
+node src/cli.js compare --models openai/gpt-5-mini,google/gemini-2.5-flash-lite --input-tokens 1000000 --output-tokens 250000 --format table
 ```
 
 ## GitHub Pages 정적 배포
@@ -159,7 +169,7 @@ node src/server.js
 - `GET /v1/catalog`
 - `GET /v1/contract`
 - `GET /v1/models`
-- `GET /v1/models?id=openai/gpt-4.1-mini`
+- `GET /v1/models?id=openai/gpt-5-mini`
 - `POST /v1/compare`
 - `POST /v1/analyze`
 
@@ -170,14 +180,14 @@ curl -s http://localhost:3030/v1/models
 ```
 
 ```bash
-curl -s http://localhost:3030/v1/models?id=openai/gpt-4.1-mini
+curl -s http://localhost:3030/v1/models?id=openai/gpt-5-mini
 ```
 
 ```bash
 curl -s http://localhost:3030/v1/compare \
   -H 'content-type: application/json' \
   -d '{
-    "model_ids": ["openai/gpt-4.1-mini", "google/gemini-2.0-flash"],
+    "model_ids": ["openai/gpt-5-mini", "google/gemini-2.5-flash-lite"],
     "workload": {
       "input_tokens": 1000000,
       "output_tokens": 250000
@@ -189,7 +199,7 @@ curl -s http://localhost:3030/v1/compare \
 curl -s http://localhost:3030/v1/analyze \
   -H 'content-type: application/json' \
   -d '{
-    "filters": { "tag": "cost" },
+    "filters": { "tag": "cost", "status": "active" },
     "workload": {
       "input_tokens": 1000000,
       "output_tokens": 250000
@@ -213,7 +223,9 @@ curl -s http://localhost:3030/v1/analyze \
 - 가격 변경 시 `data/pricing.catalog.json`을 갱신합니다.
 - 같은 날짜 기준 스냅샷을 `snapshots/YYYY-MM-DD.pricing.catalog.json`에 남깁니다.
 - 최소 검증 기준은 `id` 중복 금지, `status` 필수, `pricing_mode` 필수, `last_verified_at` 필수, `source_url` 필수입니다.
+- 현재 catalog는 OpenAI, Anthropic, Google의 공식 pricing page 기준 curated general-purpose text model 집합입니다.
+- provider가 prompt 길이, long context, batch, cache storage를 따로 공개하면 `pricing_tiers`와 확장 pricing 필드에 같이 적재합니다.
 
 ## 주의
 
-`data/pricing.catalog.json`의 값은 로컬 개발용 starter seed 입니다. 운영이나 의사결정 전에 각 provider 공식 가격 페이지 기준으로 갱신해야 합니다.
+이 catalog는 2026-03-12 기준 공식 페이지 수집본이지만, provider 가격표는 자주 바뀝니다. 실제 의사결정 전에는 `last_verified_at`과 `source_url`을 다시 확인하는 편이 안전합니다.

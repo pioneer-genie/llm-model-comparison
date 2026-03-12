@@ -38,8 +38,13 @@
       "context_window_tokens",
       "max_output_tokens",
       "tags",
+      "comparison_pricing_basis",
+      "pricing_tiers",
+      "pricing.batch_input_usd_per_1m_tokens",
+      "pricing.batch_output_usd_per_1m_tokens",
       "source_url",
-      "source_note"
+      "source_note",
+      "availability_note"
     ]
   },
   "http_endpoints": [
@@ -118,11 +123,11 @@
       "description": "List models in JSON."
     },
     {
-      "command": "llm-pricing show openai/gpt-4.1-mini",
+      "command": "llm-pricing show openai/gpt-5-mini",
       "description": "Return one model document."
     },
     {
-      "command": "llm-pricing compare --models openai/gpt-4.1-mini,google/gemini-2.0-flash --input-tokens 1000000 --output-tokens 250000",
+      "command": "llm-pricing compare --models openai/gpt-5-mini,google/gemini-2.5-flash-lite --input-tokens 1000000 --output-tokens 250000",
       "description": "Compare workload cost."
     },
     {
@@ -137,11 +142,12 @@
   "request_shapes": {
     "compare": {
       "model_ids": [
-        "openai/gpt-4.1-mini",
-        "google/gemini-2.0-flash"
+        "openai/gpt-5-mini",
+        "google/gemini-2.5-flash-lite"
       ],
       "filters": {
         "provider": "openai",
+        "status": "active",
         "tag": "cost"
       },
       "workload": {
@@ -153,7 +159,8 @@
     },
     "analyze": {
       "filters": {
-        "provider": "google"
+        "provider": "google",
+        "status": "active"
       },
       "workload": {
         "input_tokens": 1000000,
@@ -169,14 +176,16 @@
       "object": "list",
       "data": [
         {
-          "id": "openai/gpt-4.1-mini",
+          "id": "openai/gpt-5-mini",
           "provider": "openai",
           "status": "active",
           "pricing_mode": "text_tokens",
           "last_verified_at": "2026-03-12",
+          "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
           "pricing": {
-            "input_usd_per_1m_tokens": 0.4,
-            "output_usd_per_1m_tokens": 1.6
+            "input_usd_per_1m_tokens": 0.25,
+            "cached_input_usd_per_1m_tokens": 0.025,
+            "output_usd_per_1m_tokens": 2
           }
         }
       ],
@@ -195,9 +204,11 @@
         },
         "comparisons": [
           {
-            "model_id": "openai/gpt-4.1-mini",
+            "model_id": "openai/gpt-5-mini",
             "last_verified_at": "2026-03-12",
-            "estimated_total_cost_usd": 0.8
+            "status": "active",
+            "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
+            "estimated_total_cost_usd": 0.75
           }
         ]
       }

@@ -106,6 +106,8 @@ export function estimateCostForModel(model, workloadInput = {}) {
     status: model.status,
     pricing_mode: model.pricing_mode,
     last_verified_at: model.last_verified_at,
+    comparison_pricing_basis: model.comparison_pricing_basis,
+    source_url: model.source_url,
     workload,
     rates: {
       input_usd_per_1m_tokens: model.pricing.input_usd_per_1m_tokens,
@@ -186,6 +188,7 @@ function resolveTargetModels(catalog, input) {
 
   const models = listModelsInCatalog(catalog, {
     provider: input.filters?.provider,
+    status: input.filters?.status,
     tag: input.filters?.tag,
     modality: input.filters?.modality,
     sort_by: "id"

@@ -11,7 +11,7 @@ test("CLI compare prints JSON envelope by default", () => {
   const result = runCli([
     "compare",
     "--models",
-    "openai/gpt-4.1-mini,google/gemini-2.0-flash",
+    "openai/gpt-5-mini,google/gemini-2.5-flash-lite",
     "--input-tokens",
     "1000000",
     "--output-tokens",
@@ -22,7 +22,7 @@ test("CLI compare prints JSON envelope by default", () => {
 
   const parsed = JSON.parse(result.stdout);
   assert.equal(parsed.object, "price_comparison");
-  assert.equal(parsed.data.comparisons[0].model_id, "google/gemini-2.0-flash");
+  assert.equal(parsed.data.comparisons[0].model_id, "google/gemini-2.5-flash-lite");
 });
 
 test("CLI list prints table when requested", () => {
@@ -30,7 +30,8 @@ test("CLI list prints table when requested", () => {
 
   assert.equal(result.status, 0);
   assert.match(result.stdout, /model_id/);
-  assert.match(result.stdout, /google\/gemini-2\.0-flash/);
+  assert.match(result.stdout, /status/);
+  assert.match(result.stdout, /google\/gemini-2\.5-flash-lite/);
 });
 
 test("CLI show exits non-zero for unknown model", () => {
