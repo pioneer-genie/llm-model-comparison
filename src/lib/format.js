@@ -5,6 +5,7 @@ export function formatJson(value) {
 export function formatModelTable(models) {
   const rows = models.map((model) => [
     model.id,
+    model.released_at,
     model.provider,
     model.status,
     toPrice(model.pricing.input_usd_per_1m_tokens),
@@ -12,12 +13,16 @@ export function formatModelTable(models) {
     toPrice(model.pricing.cached_input_usd_per_1m_tokens ?? model.pricing.input_usd_per_1m_tokens)
   ]);
 
-  return renderTable(["model_id", "provider", "status", "input", "output", "cached_input"], rows);
+  return renderTable(
+    ["model_id", "released_at", "provider", "status", "input", "output", "cached_input"],
+    rows
+  );
 }
 
 export function formatComparisonTable(comparisons) {
   const rows = comparisons.map((item) => [
     item.model_id,
+    item.released_at ?? "-",
     item.status,
     toPrice(item.estimated_total_cost_usd),
     toPrice(item.rates.input_usd_per_1m_tokens),
@@ -27,7 +32,7 @@ export function formatComparisonTable(comparisons) {
   ]);
 
   return renderTable(
-    ["model_id", "status", "total_usd", "input_rate", "output_rate", "input_cost", "output_cost"],
+    ["model_id", "released_at", "status", "total_usd", "input_rate", "output_rate", "input_cost", "output_cost"],
     rows
   );
 }

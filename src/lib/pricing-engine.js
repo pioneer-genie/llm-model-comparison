@@ -1,4 +1,6 @@
 const TOKEN_UNIT = 1_000_000;
+export const DEFAULT_MODEL_SORT = "released_at";
+export const DEFAULT_COMPARISON_SORT = "estimated_total_cost_usd";
 
 export function listModelsInCatalog(catalog, filters = {}) {
   const models = filterModels(catalog.models, filters);
@@ -45,11 +47,13 @@ export function filterModels(models, filters = {}) {
   });
 }
 
-export function sortModels(models, sortBy = "id") {
+export function sortModels(models, sortBy = DEFAULT_MODEL_SORT) {
   const list = [...models];
 
   list.sort((left, right) => {
     switch (sortBy) {
+      case "released_at":
+        return compareIsoDatesDesc(left.released_at, right.released_at, left.id, right.id);
       case "input_price":
         return compareNumbers(
           left.pricing.input_usd_per_1m_tokens,
@@ -105,6 +109,9 @@ export function estimateCostForModel(model, workloadInput = {}) {
     model: model.model,
     status: model.status,
     pricing_mode: model.pricing_mode,
+    released_at: model.released_at,
+    release_source_url: model.release_source_url,
+    release_source_note: model.release_source_note,
     last_verified_at: model.last_verified_at,
     comparison_pricing_basis: model.comparison_pricing_basis,
     source_url: model.source_url,
@@ -149,7 +156,7 @@ export function analyzeModelsInCatalog(catalog, input = {}) {
   const budgetUsd = normalizeOptionalNumber(input.budget_usd);
   const topK = normalizePositiveInteger(input.top_k) ?? comparisons.length;
   const ranked = comparisons.slice(0, topK);
-  const cheapestOverall = comparisons[0] ?? null;
+  const cheapestOverall = findCheapestOverall(comparisons);
   const cheapestInput = findExtreme(comparisons, "input_usd_per_1m_tokens");
   const cheapestOutput = findExtreme(comparisons, "output_usd_per_1m_tokens");
   const withinBudget = budgetUsd === undefined
@@ -191,7 +198,7 @@ function resolveTargetModels(catalog, input) {
     status: input.filters?.status,
     tag: input.filters?.tag,
     modality: input.filters?.modality,
-    sort_by: "id"
+    sort_by: DEFAULT_MODEL_SORT
   });
 
   if (models.length === 0) {
@@ -201,8 +208,10 @@ function resolveTargetModels(catalog, input) {
   return models;
 }
 
-function sortComparisons(left, right, sortBy = "estimated_total_cost_usd") {
+function sortComparisons(left, right, sortBy = DEFAULT_COMPARISON_SORT) {
   switch (sortBy) {
+    case "released_at":
+      return compareIsoDatesDesc(left.released_at, right.released_at, left.model_id, right.model_id);
     case "input_price":
       return compareMetric(
         left.rates.input_usd_per_1m_tokens,
@@ -238,6 +247,14 @@ function findExtreme(comparisons, metric) {
     )[0] ?? null;
 }
 
+function findCheapestOverall(comparisons) {
+  return comparisons
+    .slice()
+    .sort((left, right) =>
+      compareMetric(left.estimated_total_cost_usd, right.estimated_total_cost_usd, left.model_id, right.model_id)
+    )[0] ?? null;
+}
+
 function compareMetric(left, right, leftId, rightId) {
   if (left !== right) {
     return left - right;
@@ -262,6 +279,17 @@ function compareStrings(left, right, leftId, rightId) {
   const value = left.localeCompare(right);
   if (value !== 0) {
     return value;
+  }
+
+  return leftId.localeCompare(rightId);
+}
+
+function compareIsoDatesDesc(left, right, leftId, rightId) {
+  const normalizedLeft = typeof left === "string" ? left : "";
+  const normalizedRight = typeof right === "string" ? right : "";
+
+  if (normalizedLeft !== normalizedRight) {
+    return normalizedRight.localeCompare(normalizedLeft);
   }
 
   return leftId.localeCompare(rightId);

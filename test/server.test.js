@@ -14,6 +14,8 @@ test("GET /v1/models returns filtered list envelope", async () => {
   assert.ok(response.body.meta.count >= 5);
   assert.equal(response.body.data.every((model) => model.provider === "openai"), true);
   assert.equal(response.body.data.every((model) => model.status === "active"), true);
+  assert.equal(response.body.data[0].id, "openai/gpt-5.4");
+  assert.equal(response.body.data[0].released_at, "2026-03-05");
 });
 
 test("GET /v1/models?id=... returns one model", async () => {

@@ -26,6 +26,8 @@
       "model",
       "status",
       "pricing_mode",
+      "released_at",
+      "release_source_url",
       "last_verified_at",
       "source_url",
       "pricing.input_usd_per_1m_tokens",
@@ -39,6 +41,7 @@
       "max_output_tokens",
       "tags",
       "comparison_pricing_basis",
+      "release_source_note",
       "pricing_tiers",
       "pricing.batch_input_usd_per_1m_tokens",
       "pricing.batch_output_usd_per_1m_tokens",
@@ -66,7 +69,7 @@
     {
       "method": "GET",
       "path": "/v1/models",
-      "description": "List models or fetch one model with ?id=<model_id>."
+      "description": "List models newest release first by default, or fetch one model with ?id=<model_id>."
     },
     {
       "method": "POST",
@@ -97,6 +100,10 @@
       "description": "Index of historical pricing catalog snapshots."
     },
     {
+      "path": "api/views/by-release-date.json",
+      "description": "Precomputed model ordering by release date descending."
+    },
+    {
       "path": "api/views/by-input-price.json",
       "description": "Precomputed model ordering by input token price."
     },
@@ -120,7 +127,7 @@
   "cli_commands": [
     {
       "command": "llm-pricing list --format json",
-      "description": "List models in JSON."
+      "description": "List models in JSON, newest release first by default."
     },
     {
       "command": "llm-pricing show openai/gpt-5-mini",
@@ -180,6 +187,8 @@
           "provider": "openai",
           "status": "active",
           "pricing_mode": "text_tokens",
+          "released_at": "2025-08-07",
+          "release_source_url": "https://openai.com/index/gpt-5-new-era-of-work/",
           "last_verified_at": "2026-03-12",
           "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
           "pricing": {
@@ -205,6 +214,8 @@
         "comparisons": [
           {
             "model_id": "openai/gpt-5-mini",
+            "released_at": "2025-08-07",
+            "release_source_url": "https://openai.com/index/gpt-5-new-era-of-work/",
             "last_verified_at": "2026-03-12",
             "status": "active",
             "comparison_pricing_basis": "Standard text-token pricing from the official model page.",

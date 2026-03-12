@@ -46,7 +46,7 @@ function printList(parsed) {
     status: parsed.status,
     tag: parsed.tag,
     modality: parsed.modality,
-    sort_by: parsed.sortBy ?? "id"
+    sort_by: parsed.sortBy ?? "released_at"
   });
 
   const response = buildEnvelope("list", models, {
@@ -121,7 +121,7 @@ function printHelp() {
     "llm-pricing <command> [options]",
     "",
     "Commands:",
-    "  list [--provider openai] [--status active] [--tag cost] [--format json|table]",
+    "  list [--provider openai] [--status active] [--tag cost] [--format json|table]  # newest releases first by default",
     "  show <model_id>",
     "  compare --models id1,id2 --input-tokens 1000000 --output-tokens 250000 [--status active]",
     "  analyze --input-tokens 1000000 --output-tokens 250000 [--budget-usd 2] [--status active]",

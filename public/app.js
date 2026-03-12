@@ -88,7 +88,7 @@ function renderModelOptions() {
   const models = listModelsInCatalog(state.catalog, {
     provider: elements.providerFilter.value || undefined,
     status: "active",
-    sort_by: "id"
+    sort_by: "released_at"
   });
 
   elements.modelSelect.innerHTML = models
@@ -102,6 +102,9 @@ function renderModelOptions() {
 }
 
 function renderStaticEndpoints(apiIndex) {
+  const byReleaseDate = findSortView(apiIndex, "by-release-date");
+  const byInputPrice = findSortView(apiIndex, "by-input-price");
+  const byOutputPrice = findSortView(apiIndex, "by-output-price");
   const sections = [
     {
       title: "raw catalog",
@@ -114,13 +117,18 @@ function renderStaticEndpoints(apiIndex) {
       description: "machine-readable contract"
     },
     {
+      title: "sorted by release date",
+      path: byReleaseDate?.path ?? "api/views/by-release-date.json",
+      description: "default model list order"
+    },
+    {
       title: "sorted by input price",
-      path: apiIndex.data.api_documents.sort_views[0].path,
+      path: byInputPrice?.path ?? "api/views/by-input-price.json",
       description: "precomputed list"
     },
     {
       title: "sorted by output price",
-      path: apiIndex.data.api_documents.sort_views[1].path,
+      path: byOutputPrice?.path ?? "api/views/by-output-price.json",
       description: "precomputed list"
     }
   ];
@@ -188,6 +196,7 @@ function renderResults(comparisons) {
     .map((item) => `
       <tr>
         <td><code>${escapeHtml(item.model_id)}</code></td>
+        <td>${escapeHtml(item.released_at ?? "-")}</td>
         <td>${escapeHtml(item.status)}</td>
         <td>${formatUsd(item.estimated_total_cost_usd)}</td>
         <td>${formatUsd(item.rates.input_usd_per_1m_tokens)}</td>
@@ -258,6 +267,10 @@ function renderEndpointCard(item) {
       <span> - ${escapeHtml(item.description)}</span>
     </li>
   `;
+}
+
+function findSortView(apiIndex, viewId) {
+  return apiIndex.data.api_documents.sort_views.find((view) => view.id === viewId) ?? null;
 }
 
 function findPresetDetails(presetId) {

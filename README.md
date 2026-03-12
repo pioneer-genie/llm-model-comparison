@@ -47,7 +47,10 @@ test/analysis.test.js              # 기본 검증
   "model": "gpt-5-mini",
   "status": "active",
   "pricing_mode": "text_tokens",
+  "released_at": "2025-08-07",
+  "release_source_url": "https://openai.com/index/gpt-5-new-era-of-work/",
   "last_verified_at": "2026-03-12",
+  "source_url": "https://developers.openai.com/api/docs/pricing",
   "comparison_pricing_basis": "Standard text-token pricing from the official model page.",
   "pricing": {
     "input_usd_per_1m_tokens": 0.25,
@@ -63,12 +66,15 @@ test/analysis.test.js              # 기본 검증
 
 - `status`: `active | preview | deprecated`
 - `pricing_mode`: 현재는 `text_tokens`
+- `released_at`: `YYYY-MM-DD`, 기본 모델 정렬 기준
+- `release_source_url`: 공식 출시/공개 확인 링크
 - `last_verified_at`: `YYYY-MM-DD`
 - `source_url`: 공식 가격 확인 링크
 - `comparison_pricing_basis`: 현재 compare/analyze가 어떤 기본 rate를 쓰는지 설명
 
 필요하면 아래 확장 필드도 같이 넣습니다.
 
+- `release_source_note`: 출시일을 추론했을 때 그 근거 설명
 - `pricing_tiers`: prompt 길이, long context 같은 대체 rate card
 - `pricing.batch_*`: batch 할인 가격
 - `pricing.cache_write_*`, `pricing.cache_storage_*`: provider별 cache write/storage 가격
@@ -102,6 +108,8 @@ node src/cli.js analyze \
   --status active
 ```
 
+`list`와 `GET /v1/models`의 기본 정렬은 `released_at` 내림차순입니다. 즉 최신 공개 모델이 먼저 나옵니다.
+
 사람이 보기 편한 테이블도 지원합니다.
 
 ```bash
@@ -124,6 +132,7 @@ npm run build
 - `dist/contracts/llm-price-api.contract.json`
 - `dist/api/index.json`
 - `dist/api/snapshots/index.json`
+- `dist/api/views/by-release-date.json`
 - `dist/api/views/by-input-price.json`
 - `dist/api/views/by-output-price.json`
 - `dist/api/views/status/*.json`
@@ -139,6 +148,7 @@ npm run build
 
 - raw catalog는 LLM이 직접 읽을 수 있음
 - snapshot 파일로 가격 변경 이력을 남길 수 있음
+- 출시일과 가격 확인일이 분리되어 있어서 최신 모델과 최신 검증 데이터를 같이 해석 가능
 - 자주 쓰는 정렬 view는 미리 JSON으로 생성 가능
 - preset workload 비교도 빌드 시 미리 생성 가능
 - 임의 workload 비교는 브라우저가 raw catalog를 읽고 클라이언트에서 계산
@@ -216,16 +226,16 @@ curl -s http://localhost:3030/v1/analyze \
 - CLI와 API가 같은 로직을 써서 응답 shape가 일관됨
 - `/v1/contract`와 `contracts/llm-price-api.contract.json`로 machine-readable contract 제공
 - GitHub Pages 배포 시에도 raw catalog와 sorted static JSON view를 그대로 유지
-- `status`, `pricing_mode`, `last_verified_at`, `source_url`가 있어서 LLM이 최신성과 운영 상태를 같이 해석 가능
+- `released_at`, `status`, `pricing_mode`, `last_verified_at`, `source_url`가 있어서 LLM이 출시 시점, 최신성, 운영 상태를 같이 해석 가능
 
 ## 데이터 운영 원칙
 
 - 가격 변경 시 `data/pricing.catalog.json`을 갱신합니다.
 - 같은 날짜 기준 스냅샷을 `snapshots/YYYY-MM-DD.pricing.catalog.json`에 남깁니다.
-- 최소 검증 기준은 `id` 중복 금지, `status` 필수, `pricing_mode` 필수, `last_verified_at` 필수, `source_url` 필수입니다.
+- 최소 검증 기준은 `id` 중복 금지, `status` 필수, `pricing_mode` 필수, `released_at` 필수, `release_source_url` 필수, `last_verified_at` 필수, `source_url` 필수입니다.
 - 현재 catalog는 OpenAI, Anthropic, Google의 공식 pricing page 기준 curated general-purpose + coding(Codex) text model 집합입니다.
 - provider가 prompt 길이, long context, batch, cache storage를 따로 공개하면 `pricing_tiers`와 확장 pricing 필드에 같이 적재합니다.
 
 ## 주의
 
-이 catalog는 2026-03-12 기준 공식 페이지 수집본이지만, provider 가격표는 자주 바뀝니다. 실제 의사결정 전에는 `last_verified_at`과 `source_url`을 다시 확인하는 편이 안전합니다.
+이 catalog는 2026-03-12 기준 공식 페이지 수집본이지만, provider 가격표는 자주 바뀝니다. 실제 의사결정 전에는 `last_verified_at`과 `source_url`을 다시 확인하고, 모델 세대 비교 시에는 `released_at`과 `release_source_url`을 함께 보는 편이 안전합니다.

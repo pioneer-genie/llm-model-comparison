@@ -14,6 +14,8 @@ test("catalog loads official provider pricing data", () => {
   assert.equal(new Set(catalog.models.map((model) => model.provider)).size, 3);
   assert.equal(new Set(catalog.models.map((model) => model.status)).size, 3);
   assert.equal(catalog.models.every((model) => model.pricing_mode === "text_tokens"), true);
+  assert.equal(catalog.models.every((model) => typeof model.released_at === "string"), true);
+  assert.equal(catalog.models.every((model) => typeof model.release_source_url === "string"), true);
   assert.equal(catalog.models.every((model) => typeof model.last_verified_at === "string"), true);
 });
 
@@ -74,6 +76,14 @@ test("listModels filters by provider", () => {
   assert.equal(models.every((model) => model.provider === "google"), true);
 });
 
+test("listModels defaults to newest released models first", () => {
+  const models = listModels();
+
+  assert.equal(models[0].id, "openai/gpt-5.4");
+  assert.equal(models[0].released_at, "2026-03-05");
+  assert.equal(models[1].id, "openai/gpt-5.4-pro");
+});
+
 test("catalog includes OpenAI Codex models", () => {
   const activeCodex = getModelById("openai/gpt-5.1-codex");
   const deprecatedCodex = getModelById("openai/codex-mini-latest");
@@ -108,6 +118,30 @@ test("compareModels respects status filters", () => {
   assert.equal(result.comparisons[0].model_id, "openai/gpt-5-nano");
 });
 
+test("compareModels can sort by release date", () => {
+  const result = compareModels({
+    model_ids: [
+      "google/gemini-3.1-flash-lite-preview",
+      "openai/gpt-5.4",
+      "anthropic/claude-sonnet-4.6"
+    ],
+    workload: {
+      input_tokens: 1_000_000,
+      output_tokens: 250_000
+    },
+    sort_by: "released_at"
+  });
+
+  assert.deepEqual(
+    result.comparisons.map((item) => item.model_id),
+    [
+      "openai/gpt-5.4",
+      "google/gemini-3.1-flash-lite-preview",
+      "anthropic/claude-sonnet-4.6"
+    ]
+  );
+});
+
 test("assertCatalogShape rejects duplicate model ids", () => {
   assert.throws(
     () =>
@@ -120,6 +154,8 @@ test("assertCatalogShape rejects duplicate model ids", () => {
             model: "m1",
             status: "active",
             pricing_mode: "text_tokens",
+            released_at: "2026-03-12",
+            release_source_url: "https://example.com/release",
             last_verified_at: "2026-03-12",
             source_url: "https://example.com/pricing",
             pricing: {
@@ -133,6 +169,8 @@ test("assertCatalogShape rejects duplicate model ids", () => {
             model: "m2",
             status: "active",
             pricing_mode: "text_tokens",
+            released_at: "2026-03-12",
+            release_source_url: "https://example.com/release",
             last_verified_at: "2026-03-12",
             source_url: "https://example.com/pricing",
             pricing: {
@@ -158,6 +196,8 @@ test("assertCatalogShape rejects missing verification metadata", () => {
             model: "test-model",
             status: "active",
             pricing_mode: "text_tokens",
+            released_at: "2026-03-12",
+            release_source_url: "https://example.com/release",
             source_url: "https://example.com/pricing",
             pricing: {
               input_usd_per_1m_tokens: 1,
@@ -167,5 +207,30 @@ test("assertCatalogShape rejects missing verification metadata", () => {
         ]
       }),
     /last_verified_at/
+  );
+});
+
+test("assertCatalogShape rejects missing release metadata", () => {
+  assert.throws(
+    () =>
+      assertCatalogShape({
+        object: "pricing_catalog",
+        models: [
+          {
+            id: "openai/test-model",
+            provider: "openai",
+            model: "test-model",
+            status: "active",
+            pricing_mode: "text_tokens",
+            last_verified_at: "2026-03-12",
+            source_url: "https://example.com/pricing",
+            pricing: {
+              input_usd_per_1m_tokens: 1,
+              output_usd_per_1m_tokens: 2
+            }
+          }
+        ]
+      }),
+    /released_at/
   );
 });

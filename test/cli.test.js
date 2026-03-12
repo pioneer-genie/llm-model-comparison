@@ -30,8 +30,20 @@ test("CLI list prints table when requested", () => {
 
   assert.equal(result.status, 0);
   assert.match(result.stdout, /model_id/);
+  assert.match(result.stdout, /released_at/);
   assert.match(result.stdout, /status/);
   assert.match(result.stdout, /google\/gemini-2\.5-flash-lite/);
+});
+
+test("CLI list defaults to release-date ordering", () => {
+  const result = runCli(["list"]);
+
+  assert.equal(result.status, 0);
+
+  const parsed = JSON.parse(result.stdout);
+  assert.equal(parsed.object, "list");
+  assert.equal(parsed.data[0].id, "openai/gpt-5.4");
+  assert.equal(parsed.data[0].released_at, "2026-03-05");
 });
 
 test("CLI show exits non-zero for unknown model", () => {

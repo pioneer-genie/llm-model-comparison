@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { loadCatalog, loadContract } from "./catalog.js";
 import { CONTRACT_VERSION } from "./contract.js";
-import { analyzeModelsInCatalog, listModelsInCatalog } from "./pricing-engine.js";
+import { analyzeModelsInCatalog, listModelsInCatalog, sortModels } from "./pricing-engine.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "../..");
@@ -56,6 +56,7 @@ export async function buildStaticSite(options = {}) {
   const modalities = uniqueSorted(catalog.models.flatMap((model) => model.modalities ?? []));
   const snapshotFiles = await loadSnapshotFiles();
   const latestVerifiedAt = uniqueSorted(catalog.models.map((model) => model.last_verified_at)).at(-1);
+  const latestReleasedAt = uniqueSorted(catalog.models.map((model) => model.released_at)).at(-1);
 
   await rm(outDir, { recursive: true, force: true });
   await mkdir(outDir, { recursive: true });
@@ -73,9 +74,10 @@ export async function buildStaticSite(options = {}) {
   await writeJson(outDir, "api/models/index.json", {
     contract_version: CONTRACT_VERSION,
     object: "list",
-    data: listModelsInCatalog(catalog, { sort_by: "id" }),
+    data: listModelsInCatalog(catalog, { sort_by: "released_at" }),
     meta: {
-      count: catalog.models.length
+      count: catalog.models.length,
+      sort_by: "released_at"
     }
   });
 
@@ -87,6 +89,11 @@ export async function buildStaticSite(options = {}) {
     });
   }
 
+  await writeJson(outDir, "api/views/by-release-date.json", createModelView(catalog, {
+    title: "Models sorted by release date descending",
+    filters: {},
+    sort_by: "released_at"
+  }));
   await writeJson(outDir, "api/views/by-input-price.json", createModelView(catalog, {
     title: "Models sorted by input token price",
     filters: {},
@@ -102,7 +109,7 @@ export async function buildStaticSite(options = {}) {
     await writeJson(outDir, `api/views/providers/${provider}.json`, createModelView(catalog, {
       title: `Models for provider ${provider}`,
       filters: { provider },
-      sort_by: "input_price"
+      sort_by: "released_at"
     }));
   }
 
@@ -110,7 +117,7 @@ export async function buildStaticSite(options = {}) {
     await writeJson(outDir, `api/views/tags/${tag}.json`, createModelView(catalog, {
       title: `Models tagged ${tag}`,
       filters: { tag },
-      sort_by: "input_price"
+      sort_by: "released_at"
     }));
   }
 
@@ -118,7 +125,7 @@ export async function buildStaticSite(options = {}) {
     await writeJson(outDir, `api/views/modalities/${modality}.json`, createModelView(catalog, {
       title: `Models supporting modality ${modality}`,
       filters: { modality },
-      sort_by: "input_price"
+      sort_by: "released_at"
     }));
   }
 
@@ -126,7 +133,7 @@ export async function buildStaticSite(options = {}) {
     await writeJson(outDir, `api/views/status/${status}.json`, createModelView(catalog, {
       title: `Models with status ${status}`,
       filters: { status },
-      sort_by: "input_price"
+      sort_by: "released_at"
     }));
   }
 
@@ -134,13 +141,15 @@ export async function buildStaticSite(options = {}) {
     await writeJson(outDir, `api/views/pricing-modes/${pricingMode}.json`, {
       contract_version: CONTRACT_VERSION,
       object: "list",
-      data: catalog.models
-        .filter((model) => model.pricing_mode === pricingMode)
-        .sort((left, right) => left.id.localeCompare(right.id)),
+      data: sortModels(
+        catalog.models.filter((model) => model.pricing_mode === pricingMode),
+        "released_at"
+      ),
       meta: {
         title: `Models with pricing mode ${pricingMode}`,
         count: catalog.models.filter((model) => model.pricing_mode === pricingMode).length,
-        pricing_mode: pricingMode
+        pricing_mode: pricingMode,
+        sort_by: "released_at"
       }
     });
   }
@@ -190,6 +199,10 @@ export async function buildStaticSite(options = {}) {
         model_index: "api/models/index.json",
         sort_views: [
           {
+            id: "by-release-date",
+            path: "api/views/by-release-date.json"
+          },
+          {
             id: "by-input-price",
             path: "api/views/by-input-price.json"
           },
@@ -229,7 +242,10 @@ export async function buildStaticSite(options = {}) {
         provider_count: providers.length,
         status_count: statuses.length,
         pricing_mode_count: pricingModes.length,
+        default_model_sort_by: "released_at",
+        default_model_sort_direction: "desc",
         latest_verified_at: latestVerifiedAt,
+        latest_released_at: latestReleasedAt,
         latest_snapshot_file: snapshotFiles[0] ?? null,
         providers,
         statuses,

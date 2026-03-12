@@ -37,7 +37,7 @@ export function createRequestHandler() {
           status: url.searchParams.get("status") ?? undefined,
           tag: url.searchParams.get("tag") ?? undefined,
           modality: url.searchParams.get("modality") ?? undefined,
-          sort_by: url.searchParams.get("sort_by") ?? "id"
+          sort_by: url.searchParams.get("sort_by") ?? "released_at"
         });
 
         return sendJson(response, 200, buildEnvelope("list", models, { count: models.length }));

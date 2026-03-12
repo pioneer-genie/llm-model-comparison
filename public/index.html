@@ -16,7 +16,8 @@
         <h1>LLM model pricing</h1>
         <p class="muted">
           Static catalog and simple browser-side comparison. Most consumers are expected to read the
-          JSON documents directly. The browser comparison defaults to active models only.
+          JSON documents directly. Model lists default to newest release first, and the browser
+          comparison defaults to active models only.
         </p>
         <ul class="link-list">
           <li><a href="./data/pricing.catalog.json">raw catalog</a></li>
@@ -43,6 +44,7 @@
               <option value="estimated_total_cost_usd">estimated_total_cost_usd</option>
               <option value="input_price">input_price</option>
               <option value="output_price">output_price</option>
+              <option value="released_at">released_at</option>
               <option value="model_id">model_id</option>
             </select>
           </label>
@@ -91,6 +93,7 @@
             <thead>
               <tr>
                 <th>model_id</th>
+                <th>released_at</th>
                 <th>status</th>
                 <th>total_usd</th>
                 <th>input_rate</th>

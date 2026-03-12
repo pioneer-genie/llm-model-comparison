@@ -38,11 +38,16 @@ export function assertCatalogShape(catalog) {
     assertEnum(model.status, MODEL_STATUSES, `${basePath}.status`);
     assertString(model?.pricing_mode, `${basePath}.pricing_mode`);
     assertEnum(model.pricing_mode, PRICING_MODES, `${basePath}.pricing_mode`);
+    assertString(model?.released_at, `${basePath}.released_at`);
+    assertIsoDate(model.released_at, `${basePath}.released_at`);
+    assertString(model?.release_source_url, `${basePath}.release_source_url`);
+    assertHttpUrl(model.release_source_url, `${basePath}.release_source_url`);
     assertString(model?.source_url, `${basePath}.source_url`);
     assertHttpUrl(model.source_url, `${basePath}.source_url`);
     assertString(model?.last_verified_at, `${basePath}.last_verified_at`);
     assertIsoDate(model.last_verified_at, `${basePath}.last_verified_at`);
     assertOptionalString(model?.comparison_pricing_basis, `${basePath}.comparison_pricing_basis`);
+    assertOptionalString(model?.release_source_note, `${basePath}.release_source_note`);
     assertOptionalString(model?.source_note, `${basePath}.source_note`);
     assertOptionalString(model?.availability_note, `${basePath}.availability_note`);
 
