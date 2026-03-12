@@ -103,24 +103,24 @@ function renderModelOptions() {
 function renderStaticEndpoints(apiIndex) {
   const sections = [
     {
-      title: "Raw catalog",
+      title: "raw catalog",
       path: apiIndex.data.raw_documents.catalog,
-      description: "Original pricing document for agents or offline analysis."
+      description: "original pricing document"
     },
     {
-      title: "Raw contract",
+      title: "raw contract",
       path: apiIndex.data.raw_documents.contract,
-      description: "The machine-readable schema and endpoint conventions."
+      description: "machine-readable contract"
     },
     {
-      title: "Sorted by input price",
+      title: "sorted by input price",
       path: apiIndex.data.api_documents.sort_views[0].path,
-      description: "Precomputed cheapest-to-expensive ordering for input tokens."
+      description: "precomputed list"
     },
     {
-      title: "Sorted by output price",
+      title: "sorted by output price",
       path: apiIndex.data.api_documents.sort_views[1].path,
-      description: "Precomputed cheapest-to-expensive ordering for output tokens."
+      description: "precomputed list"
     }
   ];
 
@@ -132,11 +132,10 @@ function renderPresetCards(apiIndex) {
     .map((preset) => {
       const details = findPresetDetails(preset.id);
       return `
-        <article class="preset-card">
-          <div class="pill">${escapeHtml(details.label)}</div>
-          <p>${escapeHtml(details.description)}</p>
-          <p><a href="${escapeAttribute(preset.path)}"><code>${escapeHtml(preset.path)}</code></a></p>
-        </article>
+        <li>
+          <a href="${escapeAttribute(preset.path)}">${escapeHtml(details.label)}</a>
+          <span> - ${escapeHtml(details.description)}</span>
+        </li>
       `;
     })
     .join("");
@@ -251,11 +250,10 @@ function getInitialModelIds() {
 
 function renderEndpointCard(item) {
   return `
-    <article class="endpoint-card">
-      <div class="pill">${escapeHtml(item.title)}</div>
-      <p>${escapeHtml(item.description)}</p>
-      <p><a href="${escapeAttribute(item.path)}"><code>${escapeHtml(item.path)}</code></a></p>
-    </article>
+    <li>
+      <a href="${escapeAttribute(item.path)}">${escapeHtml(item.title)}</a>
+      <span> - ${escapeHtml(item.description)}</span>
+    </li>
   `;
 }
 
