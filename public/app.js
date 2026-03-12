@@ -12,9 +12,6 @@ const elements = {
   outputTokens: document.querySelector("#outputTokens"),
   budgetUsd: document.querySelector("#budgetUsd"),
   modelSelect: document.querySelector("#modelSelect"),
-  compareForm: document.querySelector("#compareForm"),
-  balancedPreset: document.querySelector("#balancedPreset"),
-  clearSelection: document.querySelector("#clearSelection"),
   presetList: document.querySelector("#presetList"),
   summaryList: document.querySelector("#summaryList"),
   resultsBody: document.querySelector("#resultsBody")
@@ -50,26 +47,12 @@ function bindEvents() {
     renderModelOptions();
     renderComparison();
   });
-  elements.compareForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    renderComparison();
-  });
   elements.sortBy.addEventListener("change", renderComparison);
   elements.inputTokens.addEventListener("input", renderComparison);
   elements.cachedInputTokens.addEventListener("input", renderComparison);
   elements.outputTokens.addEventListener("input", renderComparison);
   elements.budgetUsd.addEventListener("input", renderComparison);
   elements.modelSelect.addEventListener("change", renderComparison);
-  elements.clearSelection.addEventListener("click", () => {
-    clearModelSelection();
-    renderComparison();
-  });
-  elements.balancedPreset.addEventListener("click", () => {
-    elements.inputTokens.value = "1000000";
-    elements.cachedInputTokens.value = "0";
-    elements.outputTokens.value = "250000";
-    renderComparison();
-  });
 }
 
 function populateProviderFilter(catalog) {
@@ -247,12 +230,6 @@ function syncQueryParams(selectedModels) {
 
 function getSelectedModels() {
   return [...elements.modelSelect.selectedOptions].map((option) => option.value);
-}
-
-function clearModelSelection() {
-  for (const option of elements.modelSelect.options) {
-    option.selected = false;
-  }
 }
 
 function getInitialModelIds() {
